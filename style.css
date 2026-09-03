@@ -1,10 +1,10 @@
 :root {
-  --bg: #ffffff;
-  --surface: #fafafa;
-  --border: #e6e6e6;
-  --text: #1a1a1a;
-  --text-muted: #767676;
-  --accent: #2563eb;
+  --bg: #f5f0e6;
+  --surface: #efe8d8;
+  --border: #ded2b8;
+  --text: #2b271f;
+  --text-muted: #8c8067;
+  --accent: #a8662f;
   --radius: 10px;
   font-size: 16px;
 }
@@ -80,7 +80,7 @@ body {
   justify-content: center;
   gap: 2rem;
   padding: 0.9rem;
-  background: rgba(255, 255, 255, 0.9);
+  background: rgba(245, 240, 230, 0.9);
   backdrop-filter: blur(6px);
   border-bottom: 1px solid var(--border);
 }
@@ -180,7 +180,7 @@ main {
 }
 
 .card:hover {
-  border-color: #cfcfcf;
+  border-color: #c7b995;
 }
 
 .card-head {
