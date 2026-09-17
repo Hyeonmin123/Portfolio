@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>프리시즌 부트캠프 — 이벤트 기획안</title>
+<style>
+:root {
+  --bg: #ffffff;
+  --surface: #f7f9fc;
+  --border: #e5eaf2;
+  --text: #10192b;
+  --text-muted: #66708a;
+  --blue: #2f6feb;
+  --blue-soft: #eaf1ff;
+  --blue-dark: #1d4fc4;
+  --green: #12b76a;
+  --green-soft: #e5f9ef;
+  --green-dark: #0c8f52;
+  --radius: 14px;
+  font-size: 16px;
+}
+
+* { box-sizing: border-box; }
+
+html { scroll-behavior: smooth; }
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--text);
+  font-family: "Pretendard", "Apple SD Gothic Neo", "Noto Sans KR", -apple-system,
+    BlinkMacSystemFont, "Segoe UI", sans-serif;
+  line-height: 1.7;
+  -webkit-font-smoothing: antialiased;
+}
+
+.back {
+  display: inline-flex;
+  align-items: center;
+  max-width: 760px;
+  margin: 2rem auto 0;
+  padding: 0 1.5rem;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--text-muted);
+  text-decoration: none;
+}
+
+.back:hover { color: var(--blue-dark); }
+
+header {
+  position: relative;
+  max-width: 760px;
+  margin: 0 auto;
+  padding: 1.5rem 1.5rem 3rem;
+}
+
+.eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin: 0 0 1rem;
+  letter-spacing: 0.16em;
+  font-size: 0.72rem;
+  color: var(--blue-dark);
+  font-weight: 700;
+  text-transform: uppercase;
+}
+
+.eyebrow::before {
+  content: "";
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--green);
+}
+
+h1 {
+  margin: 0 0 0.7rem;
+  font-size: clamp(1.8rem, 4.8vw, 2.5rem);
+  font-weight: 800;
+  letter-spacing: -0.02em;
+}
+
+.meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem 0.6rem;
+}
+
+.meta span {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.35rem 0.8rem;
+  border-radius: 999px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  background: var(--blue-soft);
+  color: var(--blue-dark);
+}
+
+.meta span.trend {
+  background: var(--green-soft);
+  color: var(--green-dark);
+}
+
+main {
+  max-width: 760px;
+  margin: 0 auto;
+  padding: 0 1.5rem 4rem;
+}
+
+section {
+  padding: 2.5rem 0;
+  border-top: 1px solid var(--border);
+}
+
+section:first-child { border-top: none; padding-top: 0; }
+
+h2 {
+  display: flex;
+  align-items: center;
+  gap: 0.7rem;
+  font-size: 1.2rem;
+  font-weight: 800;
+  margin: 0 0 1.1rem;
+}
+
+h2 .num {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.7rem;
+  height: 1.7rem;
+  border-radius: 50%;
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: #fff;
+  background: var(--blue);
+  flex-shrink: 0;
+}
+
+h3 {
+  font-size: 1rem;
+  font-weight: 700;
+  margin: 0 0 0.5rem;
+}
+
+p {
+  margin: 0 0 0.8rem;
+  color: var(--text-muted);
+}
+
+p:last-child { margin-bottom: 0; }
+
+.period-line {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.5rem 0.9rem;
+  border-radius: 999px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  font-size: 0.88rem;
+  color: var(--text);
+  font-weight: 600;
+}
+
+.cards {
+  display: grid;
+  gap: 1rem;
+  margin-top: 0.5rem;
+}
+
+.card {
+  position: relative;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 1.4rem 1.5rem 1.3rem;
+  overflow: hidden;
+  box-shadow: 0 1px 2px rgba(16, 25, 43, 0.03);
+  transition: transform 0.18s ease, box-shadow 0.18s ease;
+}
+
+.card::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: var(--blue);
+}
+
+.card.card-green::before { background: var(--green); }
+
+.card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 16px 30px -18px rgba(16, 25, 43, 0.25);
+}
+
+.card h3 {
+  display: flex;
+  align-items: center;
+  gap: 0.55rem;
+  margin: 0 0 0.5rem;
+}
+
+.card .step {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.5rem;
+  height: 1.5rem;
+  border-radius: 50%;
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: var(--blue-dark);
+  background: var(--blue-soft);
+  flex-shrink: 0;
+}
+
+.card.card-green .step {
+  color: var(--green-dark);
+  background: var(--green-soft);
+}
+
+.card p {
+  margin: 0;
+  color: var(--text);
+  font-size: 0.94rem;
+}
+
+ul.kpi {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: grid;
+  gap: 0.6rem;
+}
+
+ul.kpi li {
+  position: relative;
+  padding-left: 1.3rem;
+  color: var(--text);
+  font-size: 0.95rem;
+}
+
+ul.kpi li::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0.5rem;
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--blue);
+}
+
+ul.kpi li:nth-child(even)::before { background: var(--green); }
+
+footer {
+  max-width: 760px;
+  margin: 0 auto;
+  padding: 2.5rem 1.5rem 3.5rem;
+  color: var(--text-muted);
+  font-size: 0.82rem;
+}
+</style>
+</head>
+<body>
+
+<a class="back" href="../../index.html">&larr; 포트폴리오로 돌아가기</a>
+
+<header>
+  <p class="eyebrow">Event Planning · Trend Korea 2026</p>
+  <h1>프리시즌 부트캠프 — 감을 되찾는 시간</h1>
+  <div class="meta">
+    <span>🎮 리그 오브 레전드</span>
+    <span class="trend">✦ 레디코어 (ReadyCore)</span>
+  </div>
+</header>
+
+<main>
+  <section>
+    <h2><span class="num">1</span>트렌드 개요</h2>
+    <p>레디코어는 "불확실한 미래를 대비해 미리 연습하고 준비하는 삶"을 뜻하는 트렌드 코리아 2026의 키워드다. 사회 전반적으로 예측 불가능한 변화가 잦아지면서, 사람들은 결과를 통제할 수 없는 대신 스스로를 미리 준비시키는 방향으로 움직이고 있다.</p>
+  </section>
+
+  <section>
+    <h2><span class="num">2</span>게임 선정 이유</h2>
+    <p>리그 오브 레전드는 매 시즌 종료 후 "프리시즌" 기간에 아이템, 룬, 챔피언 밸런스가 대규모로 개편된다. 작년까지 통했던 빌드와 전략이 한 번에 무의미해지고, 숙련자와 신규 유저 모두 새 메타에 대한 감을 처음부터 다시 잡아야 하는 시기다. 이 "결과를 예측할 수 없는 공백기"는 레디코어가 말하는 불확실성과 정확히 겹치고, "미리 연습해서 대비한다"는 해법 역시 게임 내에서 자연스럽게 구현할 수 있다.</p>
+  </section>
+
+  <section>
+    <h2><span class="num">3</span>이벤트 목적 &amp; 기간</h2>
+    <p>프리시즌 공백기(랭크 시즌 종료 ~ 신규 시즌 시작) 동안의 이탈 방지, 개편된 룬 / 아이템 / 챔피언 학습 유도, 시즌 오픈 시점의 복귀 및 참여율 상승을 목표로 한다.</p>
+    <span class="period-line">📅 프리시즌 패치 적용일 ~ 신규 랭크 시즌 시작일 (약 2주)</span>
+  </section>
+
+  <section>
+    <h2><span class="num">4</span>이벤트 구성</h2>
+    <div class="cards">
+      <div class="card">
+        <h3><span class="step">1</span>감잡기 미션 (일일)</h3>
+        <p>개편된 룬 또는 아이템 조합을 사용해 일반 게임 3판을 완료하면 보상 지급. 신규 시스템을 강제 학습이 아닌 보상으로 자연스럽게 유도한다.</p>
+      </div>
+      <div class="card card-green">
+        <h3><span class="step">2</span>신챔프 적응 훈련 (주간)</h3>
+        <p>밸런스가 크게 바뀐 챔피언 3종을 각 1회 이상 플레이하면 특별 보상 지급. 챔피언 노출도를 높여 프리시즌 다양성을 확보한다.</p>
+      </div>
+      <div class="card">
+        <h3><span class="step">3</span>예측 챌린지 (커뮤니티 참여형)</h3>
+        <p>유저가 "이번 시즌 1티어 예상 챔피언 3개"를 사전 제출한다. 실제 시즌 오픈 후 공식 티어리스트와 비교해 맞춘 유저에게 한정 보상을 지급해 커뮤니티 화제성과 재방문을 유도한다.</p>
+      </div>
+      <div class="card card-green">
+        <h3><span class="step">4</span>최종 보상</h3>
+        <p>부트캠프를 완주한 유저에게 "준비된 자(THE PREPARED)" 칭호와 프로필 테두리를 지급하고, 신규 시즌 첫 접속 시 추가 룬 페이지 슬롯을 지급한다.</p>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <h2><span class="num">5</span>기대 효과 (KPI)</h2>
+    <ul class="kpi">
+      <li>공백기 DAU 방어</li>
+      <li>신규 룬 / 챔피언 사용률 상승</li>
+      <li>시즌 첫 주 랭크 참여율 상승</li>
+      <li>커뮤니티(예측 챌린지) 재방문 및 화제성 확보</li>
+    </ul>
+  </section>
+</main>
+
+<footer>
+  <p>트렌드 코리아 2026 기반 게임 이벤트 기획 · 김현민</p>
+</footer>
+
+</body>
+</html>
