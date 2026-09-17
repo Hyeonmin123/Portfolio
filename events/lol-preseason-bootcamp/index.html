@@ -54,28 +54,12 @@ header {
   max-width: 760px;
   margin: 0 auto;
   padding: 1.5rem 1.5rem 3rem;
-  overflow: hidden;
-}
-
-header::before {
-  content: "";
-  position: absolute;
-  top: -8rem;
-  left: 50%;
-  width: 40rem;
-  height: 22rem;
-  transform: translateX(-50%);
-  background:
-    radial-gradient(38% 60% at 28% 55%, rgba(47, 111, 235, 0.13), transparent 70%),
-    radial-gradient(38% 60% at 74% 40%, rgba(18, 183, 106, 0.13), transparent 70%);
-  pointer-events: none;
-  z-index: -1;
 }
 
 .eyebrow {
   display: inline-flex;
   align-items: center;
-  gap: 0.45rem;
+  gap: 0.5rem;
   margin: 0 0 1rem;
   letter-spacing: 0.16em;
   font-size: 0.72rem;
@@ -89,7 +73,7 @@ header::before {
   width: 7px;
   height: 7px;
   border-radius: 50%;
-  background: linear-gradient(135deg, var(--blue), var(--green));
+  background: var(--green);
 }
 
 h1 {
@@ -154,7 +138,7 @@ h2 .num {
   font-size: 0.75rem;
   font-weight: 700;
   color: #fff;
-  background: linear-gradient(135deg, var(--blue), var(--green));
+  background: var(--blue);
   flex-shrink: 0;
 }
 
@@ -208,10 +192,10 @@ p:last-child { margin-bottom: 0; }
   left: 0;
   right: 0;
   height: 4px;
-  background: linear-gradient(90deg, var(--blue), var(--green));
+  background: var(--blue);
 }
 
-.card.card-green::before { background: linear-gradient(90deg, var(--green), var(--blue)); }
+.card.card-green::before { background: var(--green); }
 
 .card:hover {
   transform: translateY(-3px);
@@ -273,8 +257,10 @@ ul.kpi li::before {
   width: 7px;
   height: 7px;
   border-radius: 50%;
-  background: linear-gradient(135deg, var(--blue), var(--green));
+  background: var(--blue);
 }
+
+ul.kpi li:nth-child(even)::before { background: var(--green); }
 
 footer {
   max-width: 760px;
