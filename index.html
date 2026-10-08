@@ -3,157 +3,128 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>김현민 | ~/portfolio</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Black+Han+Sans&family=Nanum+Gothic+Coding:wght@400;700&display=swap" rel="stylesheet">
+<title>김현민 | Portfolio</title>
 <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-<div class="crt"></div>
-
-<header class="boot">
-  <div class="boot-lines">
-    <p class="boot-line" style="--d:0">&gt; whoami</p>
-    <h1 class="boot-name" style="--d:1">김현민<span class="cursor">_</span></h1>
-    <p class="boot-line" style="--d:2">&gt; cat tagline.txt</p>
-    <p class="boot-out" style="--d:3">창의적인 아이디어를 구현하는 개발자</p>
-    <p class="boot-line" style="--d:4">&gt; contact --email</p>
-    <a class="boot-out boot-link" style="--d:5" href="mailto:hyeonmin6671@gmail.com">hyeonmin6671@gmail.com</a>
+<header class="hero">
+  <div class="hero-inner">
+    <p class="eyebrow">PORTFOLIO</p>
+    <h1>김현민</h1>
+    <p class="tagline">창의적인 아이디어를 구현하는 개발자</p>
+    <a class="contact-chip" href="mailto:hyeonmin6671@gmail.com">
+      <span class="dot"></span>hyeonmin6671@gmail.com
+    </a>
   </div>
 </header>
 
-<nav class="tabbar">
-  <a href="#education">education.log</a>
-  <a href="#career">career.log</a>
-  <a href="#projects">projects/</a>
-  <a href="#events">events/</a>
+<nav class="tabs">
+  <a href="#education">학력</a>
+  <a href="#career">경력</a>
+  <a href="#projects">프로젝트 경험</a>
+  <a href="#events">기획</a>
 </nav>
 
 <main>
-  <section id="education" class="term">
-    <div class="term-bar">
-      <span class="term-dots"><i></i><i></i><i></i></span>
-      <span class="term-path">~/portfolio/education.log</span>
-    </div>
-    <div class="term-body">
-      <p class="cmd">$ cat education.log</p>
-
-      <div class="log-entry">
-        <span class="log-prompt">01</span>
-        <div class="log-body">
-          <div class="log-date">[ 2021.03 &ndash; 현재 ]</div>
-          <div class="log-title">유한대학교</div>
-          <div class="log-sub">컴퓨터소프트웨어공학과 게임콘텐츠 전공</div>
+  <section id="education" class="section accent-blue">
+    <h2><span class="num">01</span>학력</h2>
+    <ol class="timeline">
+      <li>
+        <div class="timeline-date">2021.03 &ndash; 현재</div>
+        <div class="timeline-content">
+          <h3>유한대학교</h3>
+          <p>컴퓨터소프트웨어공학과 게임콘텐츠 전공</p>
         </div>
-      </div>
-
-      <div class="log-entry">
-        <span class="log-prompt">02</span>
-        <div class="log-body">
-          <div class="log-date">[ 2018.03 &ndash; 2021.02 ]</div>
-          <div class="log-title">경성고등학교</div>
+      </li>
+      <li>
+        <div class="timeline-date">2018.03 &ndash; 2021.02</div>
+        <div class="timeline-content">
+          <h3>경성고등학교</h3>
         </div>
-      </div>
-    </div>
+      </li>
+    </ol>
   </section>
 
-  <section id="career" class="term term-offset">
-    <div class="term-bar">
-      <span class="term-dots"><i></i><i></i><i></i></span>
-      <span class="term-path">~/portfolio/career.log</span>
-    </div>
-    <div class="term-body">
-      <p class="cmd">$ cat career.log</p>
-
-      <div class="log-entry">
-        <span class="log-prompt">01</span>
-        <div class="log-body">
-          <div class="log-date">[ 2025.06 &ndash; 2026.12 ]</div>
-          <div class="log-title">고깃집 아르바이트</div>
-          <div class="log-sub">홀서빙</div>
+  <section id="career" class="section accent-green">
+    <h2><span class="num">02</span>경력</h2>
+    <ol class="timeline">
+      <li>
+        <div class="timeline-date">2025.06 &ndash; 2026.12</div>
+        <div class="timeline-content">
+          <h3>고깃집 아르바이트</h3>
+          <p>홀서빙</p>
         </div>
-      </div>
-
-      <div class="log-entry">
-        <span class="log-prompt">02</span>
-        <div class="log-body">
-          <div class="log-date">[ 2021.06 &ndash; 2026.07 ]</div>
-          <div class="log-title">B마트 아르바이트</div>
-          <div class="log-sub">피킹, 패킹</div>
+      </li>
+      <li>
+        <div class="timeline-date">2021.06 &ndash; 2026.07</div>
+        <div class="timeline-content">
+          <h3>B마트 아르바이트</h3>
+          <p>피킹, 패킹</p>
         </div>
-      </div>
-    </div>
+      </li>
+    </ol>
   </section>
 
-  <section id="projects" class="term">
-    <div class="term-bar">
-      <span class="term-dots"><i></i><i></i><i></i></span>
-      <span class="term-path">~/portfolio/projects/</span>
-    </div>
-    <div class="term-body">
-      <p class="cmd">$ ls -la projects/</p>
+  <section id="projects" class="section">
+    <h2><span class="num">03</span>프로젝트 경험</h2>
+    <div class="cards">
 
-      <article class="proc">
-        <div class="proc-head">
-          <span class="proc-status proc-running"><i></i>RUNNING</span>
-          <h3 class="proc-name">던전_청소부_슬라임군</h3>
-          <span class="proc-time">2026.09 &ndash; 현재</span>
+      <article class="card">
+        <div class="card-head">
+          <h3>던전 청소부 슬라임군<span class="status">개발중</span></h3>
+          <span class="period">2026.09 &ndash; 현재</span>
         </div>
-        <div class="flags">
-          <span class="flag">--type <b>기타</b></span>
-          <span class="flag">--role <b>디자인 및 사운드</b></span>
+        <div class="tags">
+          <span class="tag tag-type">기타</span>
+          <span class="tag">디자인 및 사운드</span>
         </div>
         <div class="stack">
           <span>Unity</span><span>Figma</span><span>Claude</span>
         </div>
       </article>
 
-      <article class="proc proc-pink">
-        <div class="proc-head">
-          <span class="proc-status proc-done"><i></i>SHIPPED</span>
-          <h3 class="proc-name">전화_받으세요!</h3>
-          <span class="proc-time">2026.03 &ndash; 2026.06</span>
+      <article class="card card-green">
+        <div class="card-head">
+          <h3>전화 받으세요!</h3>
+          <span class="period">2026.03 &ndash; 2026.06</span>
         </div>
-        <div class="flags">
-          <span class="flag">--type <b>기능 개발</b></span>
-          <span class="flag">--role <b>개발</b></span>
+        <div class="tags">
+          <span class="tag tag-type">기능 개발</span>
+          <span class="tag">개발</span>
         </div>
         <div class="stack">
           <span>Unity</span><span>Figma</span>
         </div>
-        <ul class="out">
-          <li>&gt; 각 스테이지별 기믹을 개발, 완성된 게임을 Stove indie에 출시</li>
-          <li><a href="https://store.onstove.com/ko/games/104725" target="_blank" rel="noopener">&gt; ./play.sh &nbsp;&nbsp;Stove indie에서 실행</a></li>
+        <ul class="highlights">
+          <li>각 스테이지별 기믹을 개발, 완성된 게임을 Stove indie에 출시</li>
+          <li><a href="https://store.onstove.com/ko/games/104725" target="_blank" rel="noopener">Stove indie에서 보기 &rarr;</a></li>
         </ul>
       </article>
+
     </div>
   </section>
 
-  <section id="events" class="term term-offset">
-    <div class="term-bar">
-      <span class="term-dots"><i></i><i></i><i></i></span>
-      <span class="term-path">~/portfolio/events/</span>
-    </div>
-    <div class="term-body">
-      <p class="cmd">$ ./plan --source="trend-korea-2026"</p>
-
-      <a class="run-card" href="events/lol-preseason-bootcamp/index.html">
-        <div class="run-head">
-          <span class="run-tag">EVENT PLAN</span>
-          <span class="run-tag run-tag-pink">리그 오브 레전드</span>
+  <section id="events" class="section">
+    <h2><span class="num">04</span>기획</h2>
+    <div class="cards">
+      <a class="card card-green event-card" href="events/lol-preseason-bootcamp/index.html">
+        <div class="card-head">
+          <h3>프리시즌 부트캠프</h3>
         </div>
-        <h3 class="run-title">프리시즌 부트캠프</h3>
-        <p class="run-desc">트렌드 코리아 2026 키워드 "레디코어" 기반 게임 이벤트 기획안</p>
-        <span class="run-exec">$ ./open plan.md &amp;&amp; echo "기획안 보기 →"</span>
+        <div class="tags">
+          <span class="tag tag-type">이벤트 기획</span>
+          <span class="tag">리그 오브 레전드</span>
+        </div>
+        <p class="event-desc">트렌드 코리아 2026 키워드 "레디코어" 기반 게임 이벤트 기획안</p>
+        <span class="event-cta">기획안 보기 &rarr;</span>
       </a>
     </div>
   </section>
 </main>
 
 <footer>
-  <p>--- EOF :: &copy; 2026 김현민 :: <a href="mailto:hyeonmin6671@gmail.com">hyeonmin6671@gmail.com</a> ---</p>
+  <p>&copy; 2026 김현민. <a href="mailto:hyeonmin6671@gmail.com">hyeonmin6671@gmail.com</a></p>
 </footer>
 
 </body>
