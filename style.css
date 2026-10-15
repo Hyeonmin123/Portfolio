@@ -7,7 +7,7 @@
   --slime: #6fe3a5;
   --slime-deep: #0d7a47;
   --violet: #4a3cf0;
-  --sidebar-w: 300px;
+  --sidebar-w: 380px;
   font-size: 16px;
 }
 
@@ -41,7 +41,7 @@ a { color: inherit; text-decoration: none; }
   left: 0;
   bottom: 0;
   width: var(--sidebar-w);
-  padding: 2.5rem 2rem 2rem;
+  padding: 3rem 2.5rem 2.5rem;
   display: flex;
   flex-direction: column;
   gap: 2.25rem;
@@ -53,21 +53,22 @@ a { color: inherit; text-decoration: none; }
 .profile h1 {
   font-family: "Black Han Sans", "Pretendard Variable", sans-serif;
   font-weight: 400;
-  font-size: 3.6rem;
+  font-size: 4.6rem;
   line-height: 1;
   letter-spacing: -0.01em;
 }
 
 .role {
-  margin-top: 0.9rem;
+  margin-top: 1.1rem;
+  font-size: 1.2rem;
   font-weight: 700;
   color: var(--slime);
 }
 
 .school {
-  margin-top: 0.5rem;
-  font-size: 0.88rem;
-  line-height: 1.6;
+  margin-top: 0.7rem;
+  font-size: 1rem;
+  line-height: 1.7;
   color: #a3a6c8;
 }
 
@@ -78,9 +79,9 @@ a { color: inherit; text-decoration: none; }
 }
 
 .side-nav a {
-  padding: 0.6rem 0.9rem;
+  padding: 0.75rem 1.1rem;
   border-left: 3px solid transparent;
-  font-size: 1rem;
+  font-size: 1.2rem;
   font-weight: 600;
   color: #c4c6e0;
   transition: color 0.15s ease, background 0.15s ease, border-color 0.15s ease;
@@ -101,11 +102,11 @@ a { color: inherit; text-decoration: none; }
   gap: 0.85rem;
   padding-top: 1.5rem;
   border-top: 1px solid rgba(232, 234, 243, 0.2);
-  font-size: 0.88rem;
+  font-size: 1rem;
 }
 
 .contact li { display: grid; gap: 0.1rem; }
-.contact span { color: #a3a6c8; font-size: 0.8rem; }
+.contact span { color: #a3a6c8; font-size: 0.88rem; }
 .contact a { font-weight: 600; word-break: break-all; }
 .contact a:hover { color: var(--slime); }
 
@@ -114,8 +115,15 @@ a { color: inherit; text-decoration: none; }
 /* Content */
 main {
   margin-left: var(--sidebar-w);
-  max-width: 62rem;
   padding: 0 clamp(1.5rem, 5vw, 4rem);
+}
+
+/* Center every block in the area to the right of the sidebar */
+main > * {
+  width: 100%;
+  max-width: 56rem;
+  margin-left: auto;
+  margin-right: auto;
 }
 
 .block {
@@ -323,7 +331,7 @@ footer {
 
   .contact { margin-top: 0; padding-top: 1.1rem; }
 
-  main { margin-left: 0; max-width: none; }
+  main { margin-left: 0; }
 
   .row { grid-template-columns: 1fr auto; padding: 1.1rem 0; }
   .row-title { grid-column: 1 / -1; }
