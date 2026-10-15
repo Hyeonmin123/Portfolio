@@ -13,110 +13,131 @@
 </head>
 <body>
 
-<header class="topbar">
-  <a class="brand" href="#top">김현민</a>
-  <nav aria-label="섹션 이동">
-    <a href="#projects">프로젝트</a>
-    <a href="#docs">기획·분석</a>
-    <a href="#education">학력</a>
-    <a class="mail" href="mailto:hyeonmin6671@gmail.com">메일 보내기</a>
-  </nav>
-</header>
+<div class="layout">
 
-<main id="top">
-
-  <section class="hero">
-    <div class="slime" aria-hidden="true">
-      <span class="eye l"></span><span class="eye r"></span>
+  <aside class="sidebar">
+    <div class="profile">
+      <h1>김현민</h1>
+      <p class="role">게임 기획 · 개발</p>
+      <p class="school">유한대학교<br>컴퓨터소프트웨어공학과<br>게임콘텐츠 전공</p>
     </div>
-    <h1>김현민</h1>
-    <p class="hero-copy">
-      게임을 기획하고, 직접 만들어 출시까지 해봤습니다.<br>
-      유한대학교 게임콘텐츠 전공, 현재 두 개의 게임을 만들고 있습니다.
-    </p>
-  </section>
 
-  <section id="projects" class="block">
-    <h2>프로젝트</h2>
+    <nav class="side-nav" aria-label="카테고리">
+      <a href="#education" aria-current="true">학력</a>
+      <a href="#projects">프로젝트</a>
+      <a href="#events">기획</a>
+      <a href="#analysis">게임분석</a>
+    </nav>
 
-    <a class="shipped" href="https://store.onstove.com/ko/games/104725" target="_blank" rel="noopener">
-      <div class="shipped-main">
-        <p class="shipped-kind">Stove indie 출시작</p>
-        <h3>전화 받으세요!</h3>
-        <p class="shipped-desc">스테이지별 기믹을 개발하고, 완성한 게임을 Stove indie에 출시했습니다.</p>
-      </div>
-      <dl class="meta">
-        <div><dt>기간</dt><dd>2026.03 – 2026.06</dd></div>
-        <div><dt>역할</dt><dd>기능 개발</dd></div>
-        <div><dt>도구</dt><dd>Unity, Figma</dd></div>
-      </dl>
-      <span class="shipped-go">Stove에서 보기</span>
-    </a>
-
-    <ul class="rows">
-      <li class="row">
-        <div class="row-title">
-          <h3>던전 청소부 슬라임군</h3>
-          <span class="live">개발중</span>
-        </div>
-        <p class="row-role">디자인 · 사운드</p>
-        <p class="row-tools">Unity, Figma, Claude</p>
-        <p class="row-date">2026.09 –</p>
-      </li>
-      <li class="row">
-        <div class="row-title">
-          <h3>echofall</h3>
-          <span class="live">개발중</span>
-        </div>
-        <p class="row-role">개인 프로젝트 · AI 웹 게임</p>
-        <p class="row-tools">Claude, Figma</p>
-        <p class="row-date">2026.09 –</p>
-        <a class="row-link" href="https://echofall-game.netlify.app/" target="_blank" rel="noopener">플레이하기</a>
-      </li>
+    <ul class="contact">
+      <li><span>이메일</span><a href="mailto:hyeonmin6671@gmail.com">hyeonmin6671@gmail.com</a></li>
+      <li><span>출시작</span><a href="https://store.onstove.com/ko/games/104725" target="_blank" rel="noopener">Stove indie</a></li>
+      <li><span>플레이</span><a href="https://echofall-game.netlify.app/" target="_blank" rel="noopener">echofall</a></li>
     </ul>
-  </section>
+  </aside>
 
-  <section id="docs" class="block">
-    <h2>기획 · 분석</h2>
-    <div class="docs">
-      <a id="events" class="doc" href="events/lol-preseason-bootcamp/index.html">
+  <main>
+
+    <section id="education" class="block">
+      <h2>학력</h2>
+      <ul class="edu">
+        <li>
+          <p class="edu-date">2021.03 – 현재</p>
+          <p class="edu-name">유한대학교</p>
+          <p class="edu-sub">컴퓨터소프트웨어공학과 게임콘텐츠 전공</p>
+        </li>
+        <li>
+          <p class="edu-date">2018.03 – 2021.02</p>
+          <p class="edu-name">경성고등학교</p>
+        </li>
+      </ul>
+    </section>
+
+    <section id="projects" class="block">
+      <h2>프로젝트</h2>
+
+      <a class="shipped" href="https://store.onstove.com/ko/games/104725" target="_blank" rel="noopener">
+        <div class="shipped-main">
+          <p class="shipped-kind">Stove indie 출시작</p>
+          <h3>전화 받으세요!</h3>
+          <p class="shipped-desc">스테이지별 기믹을 개발하고, 완성한 게임을 Stove indie에 출시했습니다.</p>
+        </div>
+        <dl class="meta">
+          <div><dt>기간</dt><dd>2026.03 – 2026.06</dd></div>
+          <div><dt>역할</dt><dd>기능 개발</dd></div>
+          <div><dt>도구</dt><dd>Unity, Figma</dd></div>
+        </dl>
+        <span class="shipped-go">Stove에서 보기</span>
+      </a>
+
+      <ul class="rows">
+        <li class="row">
+          <div class="row-title">
+            <h3>던전 청소부 슬라임군</h3>
+            <span class="live">개발중</span>
+          </div>
+          <p class="row-role">디자인 · 사운드</p>
+          <p class="row-tools">Unity, Figma, Claude</p>
+          <p class="row-date">2026.09 –</p>
+        </li>
+        <li class="row">
+          <div class="row-title">
+            <h3>echofall</h3>
+            <span class="live">개발중</span>
+          </div>
+          <p class="row-role">개인 프로젝트 · AI 웹 게임</p>
+          <p class="row-tools">Claude, Figma</p>
+          <p class="row-date">2026.09 –</p>
+          <a class="row-link" href="https://echofall-game.netlify.app/" target="_blank" rel="noopener">플레이하기</a>
+        </li>
+      </ul>
+    </section>
+
+    <section id="events" class="block">
+      <h2>기획</h2>
+      <a class="doc" href="events/lol-preseason-bootcamp/index.html">
         <p class="doc-kind">이벤트 기획</p>
         <h3>프리시즌 부트캠프</h3>
         <p class="doc-sub">리그 오브 레전드</p>
         <p class="doc-desc">트렌드 코리아 2026 키워드 “레디코어”를 바탕으로 만든 게임 이벤트 기획안</p>
         <span class="doc-go">기획안 보기</span>
       </a>
-      <a id="analysis" class="doc" href="analysis/trickcal-revive/index.html">
+    </section>
+
+    <section id="analysis" class="block">
+      <h2>게임분석</h2>
+      <a class="doc" href="analysis/trickcal-revive/index.html">
         <p class="doc-kind">게임 분석</p>
         <h3>재미요소 분석하기</h3>
         <p class="doc-sub">트릭컬 리바이브</p>
         <p class="doc-desc">3주년 600뽑기 증정 이벤트를 중심으로 게임의 재미요소를 분석</p>
         <span class="doc-go">분석 보기</span>
       </a>
-    </div>
-  </section>
+    </section>
 
-  <section id="education" class="block">
-    <h2>학력</h2>
-    <ul class="edu">
-      <li>
-        <p class="edu-date">2021.03 – 현재</p>
-        <p class="edu-name">유한대학교</p>
-        <p class="edu-sub">컴퓨터소프트웨어공학과 게임콘텐츠 전공</p>
-      </li>
-      <li>
-        <p class="edu-date">2018.03 – 2021.02</p>
-        <p class="edu-name">경성고등학교</p>
-      </li>
-    </ul>
-  </section>
+    <footer>
+      <p>&copy; 2026 김현민</p>
+    </footer>
 
-</main>
+  </main>
+</div>
 
-<footer>
-  <p>&copy; 2026 김현민</p>
-  <a href="mailto:hyeonmin6671@gmail.com">hyeonmin6671@gmail.com</a>
-</footer>
+<script>
+(function () {
+  var links = document.querySelectorAll('.side-nav a');
+  var map = {};
+  links.forEach(function (a) { map[a.getAttribute('href').slice(1)] = a; });
+  if (!('IntersectionObserver' in window)) return;
+  var io = new IntersectionObserver(function (entries) {
+    entries.forEach(function (e) {
+      if (!e.isIntersecting) return;
+      links.forEach(function (a) { a.removeAttribute('aria-current'); });
+      map[e.target.id].setAttribute('aria-current', 'true');
+    });
+  }, { rootMargin: '-20% 0px -70% 0px' });
+  document.querySelectorAll('main section[id]').forEach(function (s) { io.observe(s); });
+})();
+</script>
 
 </body>
 </html>
