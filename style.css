@@ -215,10 +215,10 @@ main > * {
 
 .row {
   display: grid;
-  grid-template-columns: 2.2fr 2fr 1.6fr 6.5rem auto;
+  grid-template-columns: 2.4fr 2.4fr 2fr 5.5rem auto;
   align-items: center;
-  gap: 0.5rem 1.5rem;
-  padding: 1.15rem 0;
+  gap: 0.5rem 1rem;
+  padding: 1.15rem 1.25rem;
   border-bottom: 1px solid var(--line);
 }
 
@@ -333,7 +333,7 @@ footer {
 
   main { margin-left: 0; }
 
-  .row { grid-template-columns: 1fr auto; padding: 1.1rem 0; }
+  .row { grid-template-columns: 1fr auto; padding: 1.1rem 1rem; }
   .row-title { grid-column: 1 / -1; }
   .row-tools { grid-column: 1; }
   .row-date { grid-column: 2; grid-row: 3; }
