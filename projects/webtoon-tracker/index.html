@@ -62,16 +62,28 @@ li { margin: 0.35rem 0; }
 .box { padding: 1.1rem 1.25rem; background: var(--card); border: 2px solid var(--ink); border-radius: 6px; }
 .box h3 { margin-top: 0; }
 .muted { color: var(--ink-soft); font-size: 0.92rem; }
-.issue { margin: 1.5rem 0 0; }
-.issue h3 { margin: 0 0 0.35rem; }
-.issue dl { margin: 0; display: grid; grid-template-columns: auto 1fr; gap: 0.2rem 0.75rem; }
-.issue dt { font-size: 0.8rem; font-weight: 800; color: var(--ink-soft); padding-top: 0.2rem; }
-.issue dd { margin: 0; }
-.issue dt.fix { color: var(--violet); }
+.check { margin: 1.5rem 0 0; padding: 1.1rem 1.25rem; background: var(--card); border: 2px solid var(--ink); border-radius: 6px; }
+.check h2 { font-size: 1.25rem; margin-bottom: 0.6rem; }
+.fields { margin: 0; display: grid; grid-template-columns: 5.5rem 1fr; gap: 0.35rem 0.9rem; }
+.fields dt { font-size: 0.85rem; font-weight: 800; color: var(--ink-soft); padding-top: 0.15rem; }
+.fields dd { margin: 0; }
+.bugs { display: grid; gap: 1rem; margin-top: 1.25rem; }
+.bug { padding: 1rem 1.25rem 1.1rem; background: var(--card); border: 2px solid var(--ink); border-radius: 6px; }
+.bug-head { display: flex; flex-wrap: wrap; align-items: center; gap: 0.3rem 0.6rem; margin-bottom: 0.6rem; }
+.bug h3 { margin: 0; }
+.tag { padding: 0.05rem 0.6rem; border-radius: 999px; background: var(--slime); font-size: 0.8rem; font-weight: 700; }
+.bug .fields { grid-template-columns: 4.5rem 1fr; }
+.bug dt.fix { color: var(--violet); }
+.bug dt.guard { color: var(--slime-deep); }
 figure { margin: 1rem 0 0; }
 .diagram { display: block; width: 100%; max-width: 26rem; height: auto; margin: 0 auto; }
 figcaption { margin-top: 0.75rem; }
-@media (max-width: 600px) { .split { grid-template-columns: 1fr; } }
+@media (max-width: 600px) {
+  .split { grid-template-columns: 1fr; }
+  .fields, .bug .fields { grid-template-columns: 1fr; gap: 0; }
+  .fields dd { margin-bottom: 0.5rem; }
+  .fields dd:last-child { margin-bottom: 0; }
+}
 </style>
 </head>
 <body>
@@ -80,82 +92,85 @@ figcaption { margin-top: 0.75rem; }
 
   <h1>웹툰 정리 사이트</h1>
   <p class="status"><span>2026.10 – 현재</span><span class="live">개발중</span></p>
-  <p class="lead">여러 웹툰 플랫폼의 작품을 한 화면에서 보고 정리하는 개인용 탐색 사이트입니다. 이미 쓰고 있고, 필요한 기능을 계속 추가하고 있습니다.</p>
+  <p class="lead">여러 웹툰 플랫폼의 작품 약 1만 4천 건을 하나로 합쳐 보고 정리하는 개인용 사이트입니다. 이미 쓰고 있고, 필요한 기능을 계속 추가하고 있습니다.</p>
 
   <p class="ai-note"><strong>AI를 활용해 제작했습니다.</strong> Claude Code와 대화하며 만들었습니다. 저는 무엇을 만들지 정하고, 결과를 확인해 틀린 부분을 바로잡았습니다.</p>
 
-  <section>
-    <h2>발견한 오류와 수정</h2>
-    <p class="muted">만들면서 겪은 오류와 고친 방법입니다.</p>
-
-    <div class="issue">
-      <h3>같은 작품이 제목만 다른 경우</h3>
-      <dl>
-        <dt>문제</dt><dd>플랫폼마다 같은 작품의 제목 표기가 다릅니다.</dd>
-        <dt class="fix">해결</dt><dd>이름 정규화와 별칭 처리로 하나의 작품으로 묶었습니다.</dd>
-      </dl>
-    </div>
-
-    <div class="issue">
-      <h3>회차 수가 권으로 표시되던 오류</h3>
-      <dl>
-        <dt>문제</dt><dd>연재 회차 수(화)가 권으로 잘못 표시됐습니다.</dd>
-        <dt class="fix">해결</dt><dd>제가 결과를 보고 지적해 바로잡았고, 전자책 권 단위와 연재 화 단위를 섞지 않는 필터를 넣었습니다.</dd>
-      </dl>
-    </div>
-
-    <div class="issue">
-      <h3>세트 상품이 가려지던 버그</h3>
-      <dl>
-        <dt>문제</dt><dd>세트 상품이 목록에서 가려졌습니다.</dd>
-        <dt>원인</dt><dd>중복을 제거하는 순서에 문제가 있었습니다.</dd>
-        <dt class="fix">해결</dt><dd>버그를 수정했습니다.</dd>
-      </dl>
-    </div>
-
-    <div class="issue">
-      <h3>직접 옮겨 적은 데이터의 오류</h3>
-      <dl>
-        <dt>문제</dt><dd>직접 옮겨 적은 데이터에 틀린 줄이 있었습니다.</dd>
-        <dt class="fix">해결</dt><dd>해시로 검증해 틀린 줄을 찾아냈습니다.</dd>
-      </dl>
-    </div>
-
-    <div class="issue">
-      <h3>정보가 부족한 작품</h3>
-      <dl>
-        <dt>문제</dt><dd>일부 작품은 한 출처만으로는 정보가 부족했습니다.</dd>
-        <dt class="fix">해결</dt><dd>여러 출처의 정보를 모아 보강했습니다.</dd>
-      </dl>
-    </div>
-
-    <div class="issue">
-      <h3>DB 손상</h3>
-      <dl>
-        <dt>문제</dt><dd>중복 행과 인덱스 오류가 생겼습니다.</dd>
-        <dt>원인</dt><dd>갑작스러운 종료로 DB가 손상됐습니다.</dd>
-        <dt class="fix">해결</dt><dd>DB를 복구하고, 쓰기 내용이 디스크에 반영됐는지 확인하는 절차를 넣었습니다.</dd>
-      </dl>
-    </div>
-
-    <div class="issue">
-      <h3>점검·차단 화면</h3>
-      <dl>
-        <dt>문제</dt><dd>수집 중 점검이나 차단 화면이 뜰 수 있습니다.</dd>
-        <dt class="fix">해결</dt><dd>요청 속도를 제한하고, 이런 화면이 뜨면 우회하지 않고 멈춘 뒤 나중에 이어 받습니다.</dd>
-      </dl>
-    </div>
-  </section>
+  <div class="check">
+    <h2>검증 방법</h2>
+    <dl class="fields">
+      <dt>자동 테스트</dt><dd>pytest 테스트 67개 통과</dd>
+      <dt>데이터 검수</dt><dd>손으로 옮겨 적은 데이터를 해시로 검증해 틀린 줄을 찾아냄</dd>
+      <dt>결과 확인</dt><dd>제가 결과 화면을 보고 잘못된 표시를 지적. 회차 수가 권으로 표시되던 오류를 이렇게 발견</dd>
+      <dt>저장 확인</dt><dd>쓰기 내용이 디스크에 반영됐는지 확인</dd>
+    </dl>
+  </div>
 
   <section>
-    <h2>검증하는 방법</h2>
-    <ul>
-      <li><strong>자동 테스트:</strong> pytest로 만든 테스트 67개가 통과합니다.</li>
-      <li><strong>데이터 검수:</strong> 직접 옮겨 적은 데이터를 해시로 검증해 틀린 줄을 찾아냅니다.</li>
-      <li><strong>화면 확인:</strong> 결과 화면을 직접 보고 틀린 표시(예: 화와 권)를 AI에게 지적해 고치게 합니다.</li>
-      <li><strong>저장 확인:</strong> 쓰기 뒤에 내용이 디스크에 반영됐는지 확인합니다.</li>
-      <li><strong>수집 중단 조건:</strong> 점검이나 차단 화면이 뜨면 우회하지 않고 멈춥니다.</li>
-    </ul>
+    <h2>오류와 수정</h2>
+    <p class="muted">만들면서 생긴 오류와 수정 내용입니다. 누가 찾았는지 분명한 항목에만 발견자를 적었습니다.</p>
+
+    <div class="bugs">
+      <article class="bug">
+        <div class="bug-head"><h3>회차 수가 권으로 표시됨</h3><span class="tag">제가 결과 화면에서 발견</span></div>
+        <dl class="fields">
+          <dt>증상</dt><dd>연재 회차 수(화)가 권으로 표시됨</dd>
+          <dt class="fix">수정</dt><dd>지적을 받아 AI가 수정</dd>
+          <dt class="guard">재발 방지</dt><dd>전자책의 권 단위와 연재의 화 단위를 섞지 않는 필터 추가</dd>
+        </dl>
+      </article>
+
+      <article class="bug">
+        <div class="bug-head"><h3>DB 손상</h3></div>
+        <dl class="fields">
+          <dt>증상</dt><dd>중복 행과 인덱스 오류 발생</dd>
+          <dt>원인</dt><dd>갑작스러운 종료로 DB 손상</dd>
+          <dt class="fix">수정</dt><dd>DB 복구</dd>
+          <dt class="guard">재발 방지</dt><dd>쓰기 내용이 디스크에 반영됐는지 확인하는 절차 추가</dd>
+        </dl>
+      </article>
+
+      <article class="bug">
+        <div class="bug-head"><h3>세트 상품이 보이지 않음</h3></div>
+        <dl class="fields">
+          <dt>증상</dt><dd>세트 상품이 가려져 표시되지 않음</dd>
+          <dt>원인</dt><dd>중복을 제거하는 순서의 문제</dd>
+          <dt class="fix">수정</dt><dd>중복 제거 순서 문제 수정</dd>
+        </dl>
+      </article>
+
+      <article class="bug">
+        <div class="bug-head"><h3>같은 작품의 제목 표기 차이</h3></div>
+        <dl class="fields">
+          <dt>증상</dt><dd>같은 작품인데 플랫폼마다 제목 표기가 다름</dd>
+          <dt class="fix">수정</dt><dd>이름 정규화와 별칭 처리로 하나의 작품으로 통합</dd>
+        </dl>
+      </article>
+
+      <article class="bug">
+        <div class="bug-head"><h3>옮겨 적은 데이터의 틀린 줄</h3></div>
+        <dl class="fields">
+          <dt>증상</dt><dd>손으로 옮겨 적은 데이터에 틀린 줄이 있음</dd>
+          <dt>찾은 방법</dt><dd>해시 검증으로 틀린 줄을 찾아냄</dd>
+        </dl>
+      </article>
+
+      <article class="bug">
+        <div class="bug-head"><h3>정보가 부족한 작품</h3></div>
+        <dl class="fields">
+          <dt>증상</dt><dd>일부 작품의 정보가 너무 적음</dd>
+          <dt class="fix">수정</dt><dd>여러 출처의 정보를 모아 보강</dd>
+        </dl>
+      </article>
+
+      <article class="bug">
+        <div class="bug-head"><h3>수집 중 점검·차단 화면</h3></div>
+        <dl class="fields">
+          <dt>증상</dt><dd>수집하는 동안 점검이나 차단 화면이 뜸</dd>
+          <dt class="fix">대응</dt><dd>요청 속도 제한. 이런 화면이 뜨면 우회하지 않고 멈춘 뒤 나중에 이어서 수집</dd>
+        </dl>
+      </article>
+    </div>
   </section>
 
   <section>
@@ -172,8 +187,7 @@ figcaption { margin-top: 0.75rem; }
       <li>장르, 플랫폼, 정렬 필터</li>
       <li>성인 작품 분리</li>
     </ul>
-    <p>여러 웹툰 플랫폼의 작품 약 1만 4천 건을 하나로 통합해 보여줍니다.</p>
-    <p>수집 기능은 개인 학습용 도구로 만들었습니다. 요청 속도를 제한하고, 차단되면 멈춥니다.</p>
+    <p>수집 기능은 개인 학습용 도구로 만들었습니다.</p>
   </section>
 
   <section>
@@ -220,7 +234,7 @@ figcaption { margin-top: 0.75rem; }
     <ul class="stack">
       <li>Python</li><li>Flask</li><li>SQLite</li><li>바닐라 JavaScript</li><li>pytest</li>
     </ul>
-    <p>프런트엔드는 프레임워크 없이 만들었습니다. 테스트 67개가 통과합니다.</p>
+    <p>프런트엔드는 프레임워크 없이 만들었습니다.</p>
     <p class="muted">로컬에서 서버를 띄워 쓰는 개인용 도구라 공개 링크는 없습니다. 수집한 데이터와 개인 기록은 공개하지 않습니다.</p>
   </section>
 
