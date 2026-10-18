@@ -85,7 +85,8 @@ figcaption { margin-top: 0.75rem; }
   <p class="ai-note"><strong>AI를 활용해 제작했습니다.</strong> Claude Code와 대화하며 만들었습니다. 저는 무엇을 만들지 정하고, 결과를 확인해 틀린 부분을 바로잡았습니다.</p>
 
   <section>
-    <h2>어려웠던 점과 해결</h2>
+    <h2>발견한 오류와 수정</h2>
+    <p class="muted">만들면서 겪은 오류와 고친 방법입니다.</p>
 
     <div class="issue">
       <h3>같은 작품이 제목만 다른 경우</h3>
@@ -144,6 +145,17 @@ figcaption { margin-top: 0.75rem; }
         <dt class="fix">해결</dt><dd>요청 속도를 제한하고, 이런 화면이 뜨면 우회하지 않고 멈춘 뒤 나중에 이어 받습니다.</dd>
       </dl>
     </div>
+  </section>
+
+  <section>
+    <h2>검증하는 방법</h2>
+    <ul>
+      <li><strong>자동 테스트:</strong> pytest로 만든 테스트 67개가 통과합니다.</li>
+      <li><strong>데이터 검수:</strong> 직접 옮겨 적은 데이터를 해시로 검증해 틀린 줄을 찾아냅니다.</li>
+      <li><strong>화면 확인:</strong> 결과 화면을 직접 보고 틀린 표시(예: 화와 권)를 AI에게 지적해 고치게 합니다.</li>
+      <li><strong>저장 확인:</strong> 쓰기 뒤에 내용이 디스크에 반영됐는지 확인합니다.</li>
+      <li><strong>수집 중단 조건:</strong> 점검이나 차단 화면이 뜨면 우회하지 않고 멈춥니다.</li>
+    </ul>
   </section>
 
   <section>
