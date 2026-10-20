@@ -1,0 +1,377 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Echofall 메아리의 탑 | 김현민 Portfolio</title>
+<meta name="description" content="8초 루프를 반복하며 이전 루프의 내 움직임(메아리)을 발판 삼아 탑을 오르는 브라우저 퍼즐 게임">
+<link href="https://fonts.googleapis.com/css2?family=Black+Han+Sans&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
+<style>
+:root {
+  --paper: #e8eaf3;
+  --card: #f6f7fb;
+  --ink: #1c1b33;
+  --ink-soft: #5b5a76;
+  --line: #c9cce0;
+  --slime: #6fe3a5;
+  --slime-deep: #0d7a47;
+  --violet: #4a3cf0;
+}
+* { box-sizing: border-box; }
+body {
+  margin: 0;
+  background: var(--paper);
+  color: var(--ink);
+  font-family: "Pretendard Variable", Pretendard, "Apple SD Gothic Neo", "Noto Sans KR", sans-serif;
+  line-height: 1.75;
+  -webkit-font-smoothing: antialiased;
+  word-break: keep-all;
+  overflow-wrap: break-word;
+}
+a { color: inherit; }
+:focus-visible { outline: 3px solid var(--violet); outline-offset: 3px; border-radius: 4px; }
+.wrap { max-width: 46rem; margin: 0 auto; padding: 2rem 1.5rem 4rem; }
+h1, h2 { font-family: "Black Han Sans", "Pretendard Variable", sans-serif; font-weight: 400; line-height: 1.25; margin: 0; }
+h1 { font-size: clamp(2.2rem, 7vw, 3.4rem); }
+.sub-title { margin: 0.2rem 0 0; font-size: 1.15rem; font-weight: 700; color: var(--ink-soft); }
+.status { display: flex; flex-wrap: wrap; align-items: center; gap: 0.4rem 1rem; margin: 0.9rem 0 0; font-size: 0.95rem; color: var(--ink-soft); }
+.live { display: inline-flex; align-items: center; gap: 0.4rem; font-size: 0.85rem; font-weight: 700; color: var(--slime-deep); }
+.live::before { content: ""; width: 8px; height: 8px; border-radius: 50%; background: var(--slime-deep); animation: pulse 1.8s ease-in-out infinite; }
+@keyframes pulse { 50% { opacity: 0.25; } }
+@media (prefers-reduced-motion: reduce) { .live::before { animation: none; } .play { transition: none; } }
+.lead { margin: 1rem 0 0; font-size: 1.15rem; color: var(--ink-soft); }
+.lead strong { color: var(--ink); }
+.actions { display: flex; flex-wrap: wrap; align-items: center; gap: 0.6rem 1rem; margin: 1.4rem 0 0; }
+.play {
+  display: inline-block;
+  padding: 0.75rem 1.4rem;
+  background: var(--slime);
+  color: var(--ink);
+  border: 2px solid var(--ink);
+  border-radius: 6px;
+  font-weight: 800;
+  font-size: 1.05rem;
+  text-decoration: none;
+  transition: background 0.15s ease, color 0.15s ease;
+}
+.play:hover { background: var(--ink); color: var(--slime); }
+.actions .muted { margin: 0; }
+.new-tab { font-weight: 600; font-size: 0.9rem; }
+.ai-note {
+  margin: 1.75rem 0 0;
+  padding: 1rem 1.25rem;
+  background: var(--ink);
+  color: var(--paper);
+  border-radius: 6px;
+  font-size: 0.98rem;
+}
+.ai-note strong { color: var(--slime); }
+section { margin-top: 3rem; padding-top: 2rem; border-top: 2px solid var(--ink); }
+h2 { font-size: 1.6rem; margin-bottom: 1rem; }
+h3 { margin: 1.5rem 0 0.25rem; font-size: 1.05rem; font-weight: 800; }
+p { margin: 0.5rem 0; }
+ul { margin: 0.5rem 0; padding-left: 1.2rem; }
+li { margin: 0.35rem 0; }
+kbd {
+  display: inline-block;
+  padding: 0 0.4rem;
+  border: 1px solid var(--ink);
+  border-bottom-width: 2px;
+  border-radius: 4px;
+  background: var(--card);
+  font-family: inherit;
+  font-size: 0.85em;
+  font-weight: 700;
+  line-height: 1.5;
+}
+.stack { display: flex; flex-wrap: wrap; gap: 0.5rem; padding: 0; list-style: none; }
+.stack li { margin: 0; padding: 0.25rem 0.8rem; background: var(--card); border: 1px solid var(--line); border-radius: 999px; font-size: 0.9rem; font-weight: 600; }
+.split { display: grid; grid-template-columns: 1fr 1fr; gap: 1.25rem; }
+.box { padding: 1.1rem 1.25rem; background: var(--card); border: 2px solid var(--ink); border-radius: 6px; }
+.box h3 { margin-top: 0; }
+.muted { color: var(--ink-soft); font-size: 0.92rem; }
+.check { margin: 1.5rem 0 0; padding: 1.1rem 1.25rem; background: var(--card); border: 2px solid var(--ink); border-radius: 6px; }
+.check h2 { font-size: 1.25rem; margin-bottom: 0.6rem; }
+.fields { margin: 0; display: grid; grid-template-columns: 5.5rem 1fr; gap: 0.35rem 0.9rem; }
+.fields dt { font-size: 0.85rem; font-weight: 800; color: var(--ink-soft); padding-top: 0.15rem; }
+.fields dd { margin: 0; }
+.bugs { display: grid; gap: 1rem; margin-top: 1.25rem; }
+.bug { padding: 1rem 1.25rem 1.1rem; background: var(--card); border: 2px solid var(--ink); border-radius: 6px; }
+.bug-head { display: flex; flex-wrap: wrap; align-items: center; gap: 0.3rem 0.6rem; margin-bottom: 0.6rem; }
+.bug h3 { margin: 0; }
+.tag { padding: 0.05rem 0.6rem; border-radius: 999px; background: var(--slime); font-size: 0.8rem; font-weight: 700; }
+.bug .fields { grid-template-columns: 4.5rem 1fr; }
+.bug dt.fix { color: var(--violet); }
+.bug dt.guard { color: var(--slime-deep); }
+code { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; font-size: 0.88em; padding: 0 0.25rem; background: var(--card); border: 1px solid var(--line); border-radius: 3px; white-space: nowrap; }
+.bug code { background: var(--paper); }
+figure { margin: 1.25rem 0 0; }
+figure img { display: block; width: 100%; max-width: 100%; height: auto; border: 2px solid var(--ink); border-radius: 6px; background: var(--ink); }
+figcaption { margin-top: 0.5rem; }
+.shots { display: grid; grid-template-columns: 1fr 1.35fr; gap: 1.25rem; align-items: start; }
+.shots figure { margin-top: 0; }
+.rules { margin-top: 1rem; }
+.diagram { display: block; width: 100%; max-width: 26rem; height: auto; margin: 0 auto; }
+.numbers { display: grid; grid-template-columns: repeat(4, 1fr); gap: 0.75rem; margin: 1rem 0 0; padding: 0; list-style: none; }
+.numbers li { margin: 0; padding: 0.8rem 0.9rem; background: var(--card); border: 2px solid var(--ink); border-radius: 6px; }
+.numbers b { display: block; font-family: "Black Han Sans", "Pretendard Variable", sans-serif; font-weight: 400; font-size: 1.6rem; line-height: 1.2; }
+.numbers span { font-size: 0.88rem; color: var(--ink-soft); }
+@media (max-width: 600px) {
+  .split, .shots { grid-template-columns: 1fr; }
+  .numbers { grid-template-columns: 1fr 1fr; }
+  .fields, .bug .fields { grid-template-columns: 1fr; gap: 0; }
+  .fields dd { margin-bottom: 0.5rem; }
+  .fields dd:last-child { margin-bottom: 0; }
+}
+</style>
+<link rel="stylesheet" href="../../subnav.css">
+</head>
+<body>
+<aside class="subnav">
+  <a class="subnav-name" href="../../index.html">김현민</a>
+  <a class="subnav-back" href="../../index.html#projects">포트폴리오로 돌아가기</a>
+  <nav class="subnav-links" aria-label="카테고리"><a href="../../index.html#education">학력</a><a href="../../index.html#projects" aria-current="page">프로젝트</a><a href="../../index.html#events">기획</a><a href="../../index.html#analysis">게임분석</a></nav>
+  <div class="subnav-contact"><span>이메일</span><a href="mailto:hyeonmin6671@gmail.com">hyeonmin6671@gmail.com</a></div>
+</aside>
+
+<div class="wrap">
+
+  <h1>Echofall</h1>
+  <p class="sub-title">메아리의 탑</p>
+  <p class="status"><span>2026.09 – 현재</span><span class="live">개발중</span><span>브라우저 퍼즐 플랫포머</span></p>
+  <p class="lead"><strong>8초짜리 루프를 반복하는 퍼즐 게임입니다.</strong> 이전 루프의 내 움직임이 메아리로 남아 다음 루프에서 똑같이 움직입니다. 메아리를 발판, 스위치 누름, 레이저 가림막으로 써서 탑의 출구까지 올라갑니다.</p>
+
+  <div class="actions">
+    <a class="play" href="https://echofall-game.netlify.app" target="_blank" rel="noopener">플레이하기<span class="new-tab"> (새 탭)</span></a>
+    <p class="muted">브라우저에서 바로 실행됩니다. 키보드로 조작합니다.</p>
+  </div>
+
+  <p class="ai-note"><strong>AI를 활용해 제작했습니다.</strong> Claude Code와 협업해 만들었습니다. 코드 구현, 레벨 데이터, 검증 도구는 Claude Code가 맡았습니다. 저는 게임 콘셉트와 방향을 정하고, 직접 플레이해 보며 피드백하고, 난이도와 배포 범위를 결정했습니다.</p>
+
+  <section>
+    <h2>게임 설명</h2>
+    <figure>
+      <img src="../../assets/echofall/title.webp" width="1280" height="720" alt="Echofall 타이틀 화면. 달과 탑을 배경으로 ECHOFALL 로고와 메아리의 탑이라는 부제가 있고, 시작하기, 레벨 선택, 사운드 메뉴와 두건을 쓴 메아리 캐릭터들이 보입니다.">
+      <figcaption class="muted">타이틀 화면.</figcaption>
+    </figure>
+
+    <ul class="rules">
+      <li>루프 하나는 8초(60fps 기준 480프레임)입니다. 시간이 다 되면 처음으로 되감깁니다.</li>
+      <li>한 루프의 움직임을 <kbd>F</kbd> 키로 커밋하면 그 움직임이 메아리가 되어 다음 루프부터 똑같이 재생됩니다.</li>
+      <li>메아리는 최대 3개입니다. 4번째를 만들려면 기존 메아리 중 하나를 골라 덮어씁니다(<kbd>1</kbd>~<kbd>3</kbd>, <kbd>Esc</kbd>로 취소). 어떤 기록을 버릴지 고르는 것도 퍼즐입니다.</li>
+      <li>메아리 머리 위에 올라탈 수 있습니다. 메아리는 압력판을 계속 누르고, 서 있는 동안 레이저를 막습니다. 레버는 다시 당기지 않습니다.</li>
+      <li>5막부터는 감시자가 나옵니다. 매 루프 플레이어를 쫓고, 루프가 거듭될수록 빨라집니다. 메아리는 잡지 못합니다.</li>
+      <li>레벨마다 메아리 수와 루프 수 목표가 있고, 목표 안에 깨면 별을 받습니다.</li>
+    </ul>
+
+    <div class="shots">
+      <figure>
+        <img src="../../assets/echofall/three-echoes.png" width="431" height="399" loading="lazy" alt="플레이어 캐릭터 옆에 2번과 3번 번호가 붙은 반투명 메아리 캐릭터가 겹쳐 서 있는 장면.">
+        <figcaption class="muted">번호가 붙은 메아리가 플레이어와 겹쳐 있는 장면.</figcaption>
+      </figure>
+      <figure>
+        <img src="../../assets/echofall/watcher-5-2.png" width="800" height="684" loading="lazy" alt="레벨 5-2 사이에 선 과거 화면. 위쪽에 붉은 눈의 그림자 형태인 감시자가 있고, 아래에 플레이어, 레이저, 압력판, 가시가 보입니다. 오른쪽 위에 모래시계 아이콘과 막대가 있습니다.">
+        <figcaption class="muted">레벨 5-2. 위쪽의 붉은 눈이 감시자입니다.</figcaption>
+      </figure>
+    </div>
+  </section>
+
+  <div class="check">
+    <h2>검증 방법</h2>
+    <dl class="fields">
+      <dt>자동 풀이</dt><dd>빔서치 솔버로 레벨에 해가 있는지 찾음. 표본 검증이며 증명은 아님</dd>
+      <dt>실제 키 입력</dt><dd>Playwright로 실제 키보드 이벤트를 한 프레임씩 넣어 클리어를 확인</dd>
+      <dt>회귀 비교</dt><dd>프레임별 해시를 저장해 두고 수정 전후 동작이 같은지 비교</dd>
+      <dt>직접 플레이</dt><dd>제가 직접 플레이해 사람이 풀 수 없는 레벨을 발견. 모든 레벨을 사람이 검증한 것은 아님</dd>
+    </dl>
+  </div>
+
+  <section>
+    <h2>해결한 문제들</h2>
+    <p class="muted">개발하면서 생긴 문제와 대응입니다. 누가 찾았는지 분명한 항목에만 발견자를 적었습니다.</p>
+
+    <div class="bugs">
+      <article class="bug">
+        <div class="bug-head"><h3>풀 수 없는 레벨을 막는 자동 검증 도구</h3></div>
+        <dl class="fields">
+          <dt>문제</dt><dd>퍼즐은 의도한 풀이가 실제로 성립하는지, 더 쉬운 우회로가 없는지 확인하기 어렵습니다.</dd>
+          <dt class="fix">해결</dt><dd>실제 키 입력을 프레임 단위로 재생하는 도구(<code>kb.mjs</code>)와 빔서치 솔버(<code>probe.cjs</code>)를 만들었습니다. 메아리 수를 줄여도 깨지는지 보는 검사와 랜덤 재시작 샘플링도 더했습니다.</dd>
+          <dt>확인</dt><dd>예전 레벨(2-1~2-4)에서 솔버가 의도한 해를 실제로 찾는 것을 확인했습니다.</dd>
+          <dt class="guard">한계</dt><dd>표본 검증입니다. "목표보다 적은 메아리로는 못 깬다"는 결론도 샘플링 증거일 뿐입니다.</dd>
+        </dl>
+      </article>
+
+      <article class="bug">
+        <div class="bug-head"><h3>자동 검증이 보증하지 못한 것</h3><span class="tag">제가 직접 플레이해 발견</span></div>
+        <dl class="fields">
+          <dt>문제</dt><dd>도구로 해가 있다고 확인한 레벨 중에, 타이밍 허용 구간이 7~9프레임뿐이라 사람이 손으로 풀기 어려운 레벨이 있었습니다.</dd>
+          <dt>사례</dt><dd>5-3, 5-5는 가만히 서서 시작해야 감시자가 깨어나지 않는 풀이였습니다. 보통처럼 바로 움직이면 풀 수 없었습니다.</dd>
+          <dt>배운 점</dt><dd>자동 검증은 해가 있음을 보증할 뿐 사람이 풀 수 있음을 보증하지 않습니다.</dd>
+          <dt class="fix">새 기준</dt><dd>타이밍 허용 구간 약 20프레임 이상, 움직이는 첫 프레임부터 시작해도 풀릴 것, 입력을 앞뒤로 몇 프레임 흔들어도 클리어되는지 보는 견고성 테스트.</dd>
+          <dt>현재</dt><dd>4막, 5-3, 5-5, 6-5의 재설계는 진행하지 않았고, 해당 레벨은 그대로 두었습니다.</dd>
+        </dl>
+      </article>
+
+      <article class="bug">
+        <div class="bug-head"><h3>실제 키 입력으로만 검증</h3></div>
+        <dl class="fields">
+          <dt>문제</dt><dd>처음에는 디버그 함수와 스크립트 입력으로 클리어를 확인했는데, 이 경로는 실제 키 입력과 다를 수 있었습니다.</dd>
+          <dt>원인</dt><dd>모든 루프는 키 입력으로 시작해야 하고, 가만히 있는 루프도 <kbd>↓</kbd> 키로 시작해야 실제 플레이와 같아진다는 규칙을 발견했습니다.</dd>
+          <dt class="fix">해결</dt><dd>검증을 Playwright 실제 키보드 이벤트로 통일했습니다. 스크립트로 자동 클리어한 경우에는 업적을 주지 않게 막았습니다.</dd>
+        </dl>
+      </article>
+
+      <article class="bug">
+        <div class="bug-head"><h3>레벨을 고쳐도 기록을 잃지 않게</h3></div>
+        <dl class="fields">
+          <dt>문제</dt><dd>레벨을 개편하면 기존 플레이어의 저장 기록이 바뀐 레벨과 맞지 않게 됩니다.</dd>
+          <dt class="fix">해결</dt><dd>레벨 데이터에 개정 번호 <code>rev</code>를 두었습니다. 개정된 레벨은 별과 클리어 기록은 유지하고, 리플레이·최고 기록·황금 기록·무사고 기록만 무효화합니다.</dd>
+          <dt class="guard">검증</dt><dd>마이그레이션 테스트 스크립트(<code>rev_test.mjs</code>)로 확인했습니다.</dd>
+        </dl>
+      </article>
+
+      <article class="bug">
+        <div class="bug-head"><h3>기존 동작을 깨지 않기</h3></div>
+        <dl class="fields">
+          <dt>문제</dt><dd>레벨을 수정하면 다른 레벨이나 숨은 방의 동작이 바뀔 수 있습니다.</dd>
+          <dt class="fix">해결</dt><dd>프레임별 해시 베이스라인을 저장해 두고, 수정 뒤에도 기존 레벨과 숨은 방의 동작이 바이트 단위로 같은지 비교했습니다.</dd>
+          <dt class="guard">검증</dt><dd>숨은 방은 입구 발견부터 비밀 업적까지 실제 키 입력으로 통과하는 종단 간 스크립트로 확인했습니다.</dd>
+        </dl>
+      </article>
+
+      <article class="bug">
+        <div class="bug-head"><h3>기믹을 위한 장애물이 되지 않게</h3><span class="tag">제 피드백</span></div>
+        <dl class="fields">
+          <dt>문제</dt><dd>4막을 허공 메아리 기믹으로 채웠더니, 맵이 기믹만을 위한 장애물처럼 보였습니다.</dd>
+          <dt class="fix">원칙</dt><dd>기믹을 지워도 방으로서 말이 되는 구조를 먼저 짜고, 기믹은 그 안에서 풀이 재료 중 하나로 넣는다는 설계 원칙을 세웠습니다.</dd>
+          <dt>현재</dt><dd>이 원칙에 따른 4막 재설계는 진행하지 않았습니다.</dd>
+        </dl>
+      </article>
+
+      <article class="bug">
+        <div class="bug-head"><h3>AI의 판단이 틀렸던 사례</h3></div>
+        <dl class="fields">
+          <dt>가정</dt><dd>Claude Code는 점프의 정점이나 하강 중에 커밋하는 방법으로는 원하는 높이에 도달할 수 없다고 판단했습니다.</dd>
+          <dt>확인</dt><dd>실험해 보니 틀렸습니다. 정점 근처에서 커밋한 메아리에 올라타거나 메아리를 쌓아 더 높이 갈 수 있었습니다.</dd>
+          <dt class="fix">대응</dt><dd>실험 결과에 맞춰 계획을 수정했습니다.</dd>
+        </dl>
+      </article>
+    </div>
+  </section>
+
+  <section>
+    <h2>엔진 설계</h2>
+    <p>게임은 실제 시간이 아니라 프레임 카운터로 진행합니다. 60fps 고정 프레임의 결정론적 시뮬레이션이라, 같은 입력이면 항상 같은 결과가 나옵니다.</p>
+    <p>메아리는 입력을 다시 시뮬레이션하지 않고, 프레임마다 저장한 x, y 좌표를 그대로 재생합니다. 그래서 메아리의 움직임은 틀어지지 않습니다. 대신 메아리가 압력판, 레버, 레이저와 만날 때의 규칙은 따로 정해야 했습니다.</p>
+    <figure>
+    <svg class="diagram" viewBox="0 0 340 404" role="img" aria-labelledby="echo-title echo-desc">
+      <title id="echo-title">메아리가 만들어지고 재생되는 과정</title>
+      <desc id="echo-desc">루프 중 플레이어의 좌표를 프레임마다 기록하고, 커밋하면 그 기록이 메아리로 저장되며, 다음 루프에서 메아리는 기록된 좌표를 그대로 재생합니다. 결정론적이라 자동 검증이 가능합니다.</desc>
+      <style>
+        .t { font: 800 16px "Pretendard Variable", Pretendard, sans-serif; fill: var(--ink); }
+        .s { font: 500 14px "Pretendard Variable", Pretendard, sans-serif; fill: var(--ink-soft); }
+      </style>
+      <rect x="20" y="10" width="300" height="74" rx="6" fill="var(--card)" stroke="var(--ink)" stroke-width="2"/>
+      <text x="170" y="38" text-anchor="middle" class="t">루프 n: 플레이어 조작</text>
+      <text x="170" y="62" text-anchor="middle" class="s">프레임마다 x, y 좌표 기록</text>
+      <line x1="170" y1="84" x2="170" y2="106" stroke="var(--ink)" stroke-width="2"/>
+      <path d="M163 104 L170 114 L177 104 Z" fill="var(--ink)"/>
+      <rect x="20" y="114" width="300" height="74" rx="6" fill="var(--slime)" stroke="var(--ink)" stroke-width="2"/>
+      <text x="170" y="142" text-anchor="middle" class="t">커밋 (F 키)</text>
+      <text x="170" y="166" text-anchor="middle" class="s" style="fill: var(--ink)">좌표 기록을 메아리로 저장 · 최대 3개</text>
+      <line x1="170" y1="188" x2="170" y2="210" stroke="var(--ink)" stroke-width="2"/>
+      <path d="M163 208 L170 218 L177 208 Z" fill="var(--ink)"/>
+      <rect x="20" y="218" width="300" height="74" rx="6" fill="var(--card)" stroke="var(--ink)" stroke-width="2"/>
+      <text x="170" y="246" text-anchor="middle" class="t">루프 n+1: 메아리 재생</text>
+      <text x="170" y="270" text-anchor="middle" class="s">물리 계산 없이 기록된 좌표를 따라감</text>
+      <line x1="170" y1="292" x2="170" y2="314" stroke="var(--ink)" stroke-width="2" stroke-dasharray="4 4"/>
+      <path d="M163 312 L170 322 L177 312 Z" fill="var(--ink)"/>
+      <rect x="20" y="322" width="300" height="74" rx="6" fill="var(--ink)" stroke="var(--ink)" stroke-width="2"/>
+      <text x="170" y="350" text-anchor="middle" class="t" style="fill: var(--slime)">같은 입력이면 같은 결과</text>
+      <text x="170" y="374" text-anchor="middle" class="s" style="fill: var(--paper)">자동 검증과 솔버를 만들 수 있음</text>
+    </svg>
+    <figcaption class="muted">메아리는 입력이 아니라 좌표 기록입니다. 시뮬레이션이 결정론적이어서 같은 키 입력을 다시 넣으면 같은 결과를 재현할 수 있고, 이것이 자동 검증의 바탕이 됩니다.</figcaption>
+    </figure>
+    <ul>
+      <li>한 번의 플레이 세션(루프 번호, 메아리, 상태)을 다루는 <code>Session</code>과 한 루프의 물리·오브젝트를 다루는 <code>World</code>로 나눴습니다.</li>
+      <li>맵은 18행 32열 타일 데이터입니다. 움직이는 발판, 블록, 메아리를 올라탈 수 있는 고체로 다룹니다.</li>
+      <li>레이저는 매 프레임 광선 경로를 계산하고, 문·게이트·발판·블록·메아리가 광선을 가립니다.</li>
+      <li>막과 레벨 수를 코드에 고정하지 않고 데이터에서 읽게 했습니다. 막이 늘어나도 구조를 바꾸지 않아도 됩니다.</li>
+      <li>자동 테스트를 위해 프레임을 수동으로 진행하는 디버그 API를 열어 두었습니다.</li>
+    </ul>
+  </section>
+
+  <section>
+    <h2>진행 구조와 부가 콘텐츠</h2>
+    <ul class="numbers">
+      <li><b>30</b><span>캠페인 레벨 (6막)</span></li>
+      <li><b>10</b><span>도전 레벨</span></li>
+      <li><b>6</b><span>숨은 방</span></li>
+      <li><b>42</b><span>업적 (탭 4개)</span></li>
+    </ul>
+    <ul>
+      <li>타이틀에서 허브로 들어가 캠페인, 도전 레벨, 레벨 에디터를 고릅니다. 도전 레벨은 캠페인 5레벨, 에디터는 10레벨을 깨면 열립니다.</li>
+      <li>막마다 배경, 음악, 색감이 다릅니다. 6막 6-5 「너머」가 마지막 레벨입니다.</li>
+      <li>도전 레벨은 천칭 5개와 태엽 5개로, 캠페인보다 타이밍이 빡빡합니다.</li>
+      <li>레벨마다 숨겨진 황금 기록 기준이 있고, 그 안에 깨면 레벨 카드에 황금 테두리가 생깁니다.</li>
+      <li>숨은 방 6개는 맵 안의 합창 문, 테두리의 구멍, 메아리가 드러내는 계단 등으로 들어갑니다. 숨은 요소에는 일부러 모호한 힌트만 둡니다.</li>
+      <li>효과음과 배경음악은 오디오 파일 없이 Web Audio API로 코드에서 합성합니다.</li>
+    </ul>
+    <figure>
+      <img src="../../assets/echofall/achievements.png" width="1200" height="462" loading="lazy" alt="업적 화면. 진행, 숙련, 놀이, 비밀 탭이 있고 진행 탭에 첫 발걸음, 각성 완주, 공명 완주 등 업적 카드 9개와 진행 막대가 보입니다. 위쪽에 8 / 42 달성이 표시됩니다.">
+      <figcaption class="muted">업적 화면. 업적을 진행, 숙련, 놀이, 비밀 4개 탭으로 나눴습니다.</figcaption>
+    </figure>
+    <p>처음 만든 허브와 버튼은 볼록하고 반짝였습니다. 제가 "AI가 만든 것 같다"고 지적한 뒤 그림자, 광택, 그라디언트, 글로우를 걷어내고 둥근 정도를 줄여 평평한 행 구조로 다시 만들었습니다.</p>
+  </section>
+
+  <section>
+    <h2>기술</h2>
+    <ul class="stack">
+      <li>HTML5 Canvas 2D</li><li>JavaScript</li><li>Web Audio API</li><li>localStorage</li><li>Playwright (검증)</li>
+    </ul>
+    <p>프레임워크, 라이브러리, 번들러 없이 정적 파일만으로 동작합니다. 진행도, 업적, 설정은 브라우저 localStorage에 저장합니다.</p>
+  </section>
+
+  <section>
+    <h2>제 역할과 AI 역할</h2>
+    <div class="split">
+      <div class="box">
+        <h3>AI(Claude Code)</h3>
+        <ul>
+          <li>코드 구현</li>
+          <li>레벨 데이터 제작</li>
+          <li>검증 도구와 솔버 작성</li>
+          <li>수치 실험</li>
+          <li>버그 수정</li>
+        </ul>
+      </div>
+      <div class="box">
+        <h3>제가 한 일</h3>
+        <ul>
+          <li>게임 콘셉트와 설계 방향 결정</li>
+          <li>허브 구조와 해금 조건 결정</li>
+          <li>이스터에그, 숨은 방, 업적 아이디어 방향 제시</li>
+          <li>막별 난이도 곡선 목표 제시</li>
+          <li>"AI가 만든 것 같은" UI를 지적하고 방향 제시</li>
+          <li>직접 플레이 테스트와 피드백: "절대 못 깬다", "기믹이 장애물처럼 보인다", "6-5가 너무 어렵다"</li>
+          <li>배포 시점과 범위 결정</li>
+          <li>학생 평가자를 고려해 난이도를 낮추기로 결정</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <h2>현재 상태</h2>
+    <ul>
+      <li>개발중입니다. 저장소 첫 커밋은 2026-09-23입니다.</li>
+      <li>2막과 3막의 재설계는 마무리했습니다.</li>
+      <li>4막, 5-3, 5-5, 6-5의 재설계는 진행하지 않았고, 해당 레벨은 그대로 두었습니다.</li>
+      <li>막별 난이도 목표는 일부 5·6막 레벨이 예전 설계 그대로라 완전히 맞추지 못했습니다.</li>
+      <li>검증은 자동 검증(표본 검증)과 일부 직접 플레이로 했습니다. 모든 레벨을 사람이 검증하지는 않았습니다.</li>
+    </ul>
+  </section>
+</div>
+</body>
+</html>
