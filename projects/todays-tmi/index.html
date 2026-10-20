@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>오늘의 TMI 자동 발행 | 김현민 Portfolio</title>
+<title>오늘의 잡다한 정보 자동 발행 | 김현민 Portfolio</title>
 <meta name="description" content="인스타그램 계정 @today.tminformation에 릴스와 사진 게시물을 정해진 시간에 자동으로 올리는 시스템">
 <link href="https://fonts.googleapis.com/css2?family=Black+Han+Sans&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
@@ -124,7 +124,7 @@ figcaption { margin-top: 0.5rem; }
 
 <div class="wrap">
 
-  <h1>오늘의 TMI</h1>
+  <h1>오늘의 잡다한 정보</h1>
   <p class="status"><span>2026.09 –</span><span class="live">운영중</span><span>인스타그램 자동 발행 시스템</span></p>
   <p class="lead"><strong>인스타그램 계정 @today.tminformation에 릴스와 사진 게시물을 정해진 시간에 자동으로 올리는 시스템입니다.</strong> 콘텐츠는 미리 만들어 검수하고, 발행과 기록은 GitHub Actions가 맡습니다. 서버와 DB 없이 GitHub만으로 운영합니다.</p>
 
@@ -160,7 +160,7 @@ figcaption { margin-top: 0.5rem; }
     <h2>시스템 구조</h2>
     <figure>
     <svg class="diagram" viewBox="0 0 340 650" role="img" aria-labelledby="arch-title arch-desc">
-      <title id="arch-title">오늘의 TMI 발행 파이프라인</title>
+      <title id="arch-title">오늘의 잡다한 정보 발행 파이프라인</title>
       <desc id="arch-desc">로컬에서 콘텐츠 뱅크 JSON을 읽어 릴스와 캐러셀을 렌더하고 음성을 검수한 뒤 결과물을 커밋합니다. GitHub Actions 크론이 아직 올라가지 않은 소재를 골라 Instagram Graph API로 발행하고, state/log.json에 기록합니다.</desc>
       <style>
         .t { font: 800 16px "Pretendard Variable", Pretendard, sans-serif; fill: var(--ink); }
