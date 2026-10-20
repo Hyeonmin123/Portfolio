@@ -30,7 +30,7 @@ body { padding-left: var(--subnav-w); }
   line-height: 1;
 }
 
-.subnav-back {
+.subnav .subnav-back {
   align-self: flex-start;
   padding: 0.7rem 1.2rem;
   border-radius: 6px;
@@ -41,7 +41,7 @@ body { padding-left: var(--subnav-w); }
   transition: background 0.15s ease;
 }
 
-.subnav-back:hover { background: #fff; }
+.subnav .subnav-back:hover { background: #fff; }
 
 .subnav-links { display: flex; flex-direction: column; gap: 0.15rem; }
 
@@ -91,7 +91,7 @@ body { padding-left: var(--subnav-w); }
   .subnav-name { display: none; }
   .subnav-contact { display: none; }
 
-  .subnav-back { flex: 0 0 auto; padding: 0.45rem 0.9rem; font-size: 0.92rem; }
+  .subnav .subnav-back { flex: 0 0 auto; padding: 0.45rem 0.9rem; font-size: 0.92rem; }
 
   .subnav-links { flex-direction: row; overflow-x: auto; gap: 0.3rem; min-width: 0; }
 
