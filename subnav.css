@@ -1,4 +1,4 @@
-/* Left navigation shared by the detail pages (projects/, events/, analysis/) */
+/* Left navigation shared by the detail pages (projects/, events/) */
 :root { --subnav-w: 380px; }
 
 body { padding-left: var(--subnav-w); }
