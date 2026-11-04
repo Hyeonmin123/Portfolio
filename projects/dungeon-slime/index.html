@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>슬라임군 플레이 기록 | 김현민 Portfolio</title>
+<link href="https://fonts.googleapis.com/css2?family=Black+Han+Sans&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
+<style>
+:root {
+  --paper: #e8eaf3;
+  --card: #f6f7fb;
+  --ink: #1c1b33;
+  --ink-soft: #5b5a76;
+  --line: #c9cce0;
+  --slime: #6fe3a5;
+  --slime-deep: #0d7a47;
+  --violet: #4a3cf0;
+}
+* { box-sizing: border-box; }
+body {
+  margin: 0;
+  background: var(--paper);
+  color: var(--ink);
+  font-family: "Pretendard Variable", Pretendard, "Apple SD Gothic Neo", "Noto Sans KR", sans-serif;
+  line-height: 1.75;
+  -webkit-font-smoothing: antialiased;
+  word-break: keep-all;
+  overflow-wrap: break-word;
+}
+a { color: inherit; }
+:focus-visible { outline: 3px solid var(--violet); outline-offset: 3px; border-radius: 4px; }
+.wrap { max-width: 46rem; margin: 0 auto; padding: 2rem 1.5rem 4rem; }
+.back { display: inline-block; margin-bottom: 2.5rem; font-weight: 700; text-decoration: none; border-bottom: 2px solid var(--ink); }
+.back:hover { color: var(--violet); border-color: var(--violet); }
+h1, h2 { font-family: "Black Han Sans", "Pretendard Variable", sans-serif; font-weight: 400; line-height: 1.25; margin: 0; }
+h1 { font-size: clamp(2.2rem, 7vw, 3.4rem); }
+.status { display: flex; flex-wrap: wrap; align-items: center; gap: 0.4rem 1rem; margin: 0.9rem 0 0; font-size: 0.95rem; color: var(--ink-soft); }
+.live { display: inline-flex; align-items: center; gap: 0.4rem; font-size: 0.85rem; font-weight: 700; color: var(--slime-deep); }
+.live::before { content: ""; width: 8px; height: 8px; border-radius: 50%; background: var(--slime-deep); animation: pulse 1.8s ease-in-out infinite; }
+@keyframes pulse { 50% { opacity: 0.25; } }
+@media (prefers-reduced-motion: reduce) { .live::before { animation: none; } }
+.lead { margin: 1rem 0 0; font-size: 1.15rem; color: var(--ink-soft); }
+.ai-note {
+  margin: 1.75rem 0 0;
+  padding: 1rem 1.25rem;
+  background: var(--ink);
+  color: var(--paper);
+  border-radius: 6px;
+  font-size: 0.98rem;
+}
+.ai-note strong { color: var(--slime); }
+section { margin-top: 3rem; padding-top: 2rem; border-top: 2px solid var(--ink); }
+h2 { font-size: 1.6rem; margin-bottom: 1rem; }
+h3 { margin: 1.5rem 0 0.25rem; font-size: 1.05rem; font-weight: 800; }
+p { margin: 0.5rem 0; }
+ul { margin: 0.5rem 0; padding-left: 1.2rem; }
+li { margin: 0.35rem 0; }
+.muted { color: var(--ink-soft); font-size: 0.92rem; }
+.memo { font-weight: 700; color: var(--violet); white-space: nowrap; }
+.tbd { font-weight: 700; color: var(--violet); white-space: nowrap; }
+
+.split { display: grid; grid-template-columns: 1fr 1fr; gap: 1.25rem; margin-top: 1.25rem; }
+.hl { padding: 1rem 1.25rem 1.1rem; background: var(--card); border: 2px solid var(--ink); border-left-width: 8px; border-radius: 6px; }
+.hl.num { border-left-color: var(--slime-deep); }
+.hl.open { border-left-color: var(--violet); }
+.hl h3 { margin: 0 0 0.4rem; }
+.hl ul { padding-left: 1.1rem; font-size: 0.95rem; }
+
+.log { width: 100%; margin-top: 1.5rem; border-collapse: collapse; background: var(--card); border: 2px solid var(--ink); font-size: 0.95rem; }
+.log th, .log td { padding: 0.6rem 0.8rem; border-bottom: 1px solid var(--line); text-align: left; vertical-align: top; }
+.log thead th { background: var(--ink); color: var(--paper); font-size: 0.85rem; font-weight: 800; }
+.log tbody th { width: 7.5rem; font-weight: 800; border-right: 1px solid var(--line); }
+.log tbody tr:last-child td { border-bottom: 2px solid var(--ink); }
+.log tbody:last-child tr:last-child td { border-bottom: 0; }
+.log tbody th[rowspan] { border-bottom: 2px solid var(--ink); }
+.log tbody:last-child th[rowspan] { border-bottom: 0; }
+.log td.note { width: 34%; color: var(--ink-soft); }
+.log tr.mark td { background: #e3f8ec; }
+.log tr.mark-open td { background: #ebe9fd; }
+.log .none { color: #8c8ba6; }
+
+.limits { padding-left: 1.2rem; }
+.learn { margin-top: 1.25rem; padding: 0.9rem 1.25rem; background: var(--card); border: 2px solid var(--ink); border-radius: 6px; }
+
+.shot {
+  margin-top: 3rem;
+  padding: 2.5rem 1.25rem;
+  border: 2px dashed var(--ink-soft);
+  border-radius: 6px;
+  text-align: center;
+  color: var(--ink-soft);
+  font-weight: 700;
+}
+.credit { margin-top: 1.5rem; }
+
+@media (max-width: 600px) {
+  .split { grid-template-columns: 1fr; }
+  .log, .log tbody, .log tr, .log th, .log td { display: block; width: auto; }
+  .log { border: 0; background: transparent; }
+  .log thead { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); }
+  .log tbody { margin-top: 1rem; background: var(--card); border: 2px solid var(--ink); border-radius: 6px; overflow: hidden; }
+  .log tbody th, .log tbody th[rowspan] { width: auto; background: var(--ink); color: var(--paper); border: 0; }
+  .log tr { border-bottom: 1px solid var(--line); }
+  .log tbody tr:last-child { border-bottom: 0; }
+  .log td, .log tbody tr:last-child td { border: 0; }
+  .log td { padding: 0.5rem 0.8rem 0; }
+  .log td.note { width: auto; padding: 0.1rem 0.8rem 0.6rem; font-size: 0.88rem; }
+  .log td.note::before { content: "비고 "; font-weight: 800; color: var(--ink-soft); }
+  .memo, .tbd { white-space: normal; }
+}
+</style>
+<link rel="stylesheet" href="../../subnav.css">
+</head>
+<body>
+<aside class="subnav">
+  <a class="subnav-name" href="../../index.html">김현민</a>
+  <a class="subnav-back" href="../../index.html#projects">포트폴리오로 돌아가기</a>
+  <nav class="subnav-links" aria-label="카테고리"><a href="../../index.html#education">학력</a><a href="../../index.html#qa">QA 관점</a><a href="../../index.html#projects" aria-current="page">프로젝트</a><a href="../../index.html#events">기획</a></nav>
+  <div class="subnav-contact"><span>이메일</span><a href="mailto:hyeonmin6671@gmail.com">hyeonmin6671@gmail.com</a></div>
+</aside>
+
+<div class="wrap">
+
+  <h1>슬라임군 플레이 기록</h1>
+  <p class="status"><span>던전 청소부 슬라임군 · QA 관점</span><span class="live">개발중</span></p>
+  <p class="lead">던전 청소부 슬라임군은 팀 프로젝트로 만들고 있는 게임입니다. 저는 초기 기획과 QA를 맡았습니다. 디자인은 AI가 만들었습니다.</p>
+  <p>게임을 플레이하면서 이상하거나 불편한 점을 Notion에 적었습니다. 기록에 나오는 것은 런, 런 강화, 도감, 성장의 나무, 소환, 청소하는 슬라임들, 던전 2층과 3층, 긴급 배송 같은 화면과 요소입니다. 플레이한 빌드의 버전과 시기는 <span class="tbd">[확인 필요]</span>입니다.</p>
+
+  <p class="ai-note"><strong>정식 테스트 절차가 아니라 플레이어 시점으로 정리한 기록입니다.</strong> 플레이하다 눈에 띈 것을 그때그때 적었습니다.</p>
+
+  <section id="log">
+    <h2>유형별로 나눈 기록</h2>
+    <p class="muted">Notion에 적은 항목을 네 가지 유형으로 나눴습니다. 문장은 원래 기록에 가깝게 줄여 옮겼고, 숫자는 적은 그대로 두었습니다.</p>
+
+    <div class="split">
+      <div class="hl num">
+        <h3>조건을 숫자로 적은 것</h3>
+        <ul>
+          <li>자동 소환 노드를 켜면 쿨타임이 돌기도 전에 소환함. 완전 랜덤 쿨타임이 1초일 때도, 0.3초일 때도 소환함.</li>
+          <li>극 초반에 일반 등급은 7원을 얻고 소환은 8원을 버림.</li>
+          <li>기존에는 아이템 2000개로 코어 10000개도 못 채웠는데 지금은 25000개를 줌. 밸런스가 수정된 건지는 모르겠음. <span class="tbd">[확인 필요]</span></li>
+        </ul>
+      </div>
+      <div class="hl open">
+        <h3>확정하지 않고 표시해 둔 것</h3>
+        <ul>
+          <li>후반부에 한 런을 너무 오래 돌리면 멈춤. 개인 컴퓨터 문제인지 확인 필요.</li>
+          <li>돈을 벌면 런 강화 버튼의 눌림 판정이 바뀜. <span class="memo">[기능 문제]</span></li>
+          <li>코어를 25000개 주는 것이 밸런스 수정인지는 모름. <span class="tbd">[확인 필요]</span></li>
+        </ul>
+      </div>
+    </div>
+
+    <table class="log">
+      <thead>
+        <tr><th scope="col">유형</th><th scope="col">대표 사례</th><th scope="col">비고</th></tr>
+      </thead>
+      <tbody>
+        <tr class="mark"><th scope="rowgroup" rowspan="6">기능 오류</th><td>자동 소환 노드를 활성화하면 소환 쿨타임이 돌기도 전에 소환함. 완전 랜덤 쿨타임이 1초일 때도, 0.3초일 때도 소환함.</td><td class="note"><span class="none">메모 없음</span></td></tr>
+        <tr><td>런 강화 창을 켜고 도감을 켜면 런 강화 창이 그대로 켜져 있음.</td><td class="note">한쪽은 꺼지는 게 좋을 듯</td></tr>
+        <tr class="mark-open"><td>런 강화 버튼을 누르려 할 때 돈을 벌면 눌림 판정이 바뀌어 누르기 힘듦.</td><td class="note"><span class="memo">[기능 문제]</span></td></tr>
+        <tr class="mark-open"><td>후반부에 한 런을 너무 오래 돌리면 멈춤.</td><td class="note">개인 컴퓨터 문제인지 확인 필요</td></tr>
+        <tr><td>배경 BGM이 한 번 재생된 뒤 잠시 끊겼다가 다시 재생됨.</td><td class="note"><span class="none">메모 없음</span></td></tr>
+        <tr><td>저장소 갯수를 넘겨도 채워짐.</td><td class="note"><span class="none">메모 없음</span></td></tr>
+      </tbody>
+      <tbody>
+        <tr><th scope="rowgroup" rowspan="3">화면 간 동작 불일치</th><td>도감과 도움말 화면에서는 시간이 흐르지 않고(청소하는 슬라임들이 일을 안 함), 화면을 나가면 시간이 스킵됨. 런 강화와 성장의 나무 화면에서는 시간이 흐름.</td><td class="note">통일할 필요 있음</td></tr>
+        <tr><td>도감 화면은 빈 공간을 클릭하면 꺼지는데 성장의 나무는 빈 공간을 클릭해도 안 꺼짐.</td><td class="note">통일하는 게 좋을 듯</td></tr>
+        <tr><td>도움말 일부 구간에 커스텀 마우스 커서가 적용 안 됨. 보스, 포탈도 커스텀 커서 적용 안 됨.</td><td class="note"><span class="none">메모 없음</span></td></tr>
+      </tbody>
+      <tbody>
+        <tr><th scope="rowgroup" rowspan="8">UI 문제</th><td>기본 커스텀 커서와 청소할 때 커서 모양의 크기 차이가 있음.</td><td class="note"><span class="memo">[사이즈 통일]</span></td></tr>
+        <tr><td>커스텀 커서가 생각보다 작고 위장색이라 빠르게 움직이면 잘 안 보임.</td><td class="note"><span class="none">메모 없음</span></td></tr>
+        <tr><td>모든 버튼 끝자락에 마우스를 대면 버튼 눌리는 모션이 연달아 보임.</td><td class="note"><span class="memo">[보기 불편한 정도]</span></td></tr>
+        <tr><td>텍스트가 버튼 밖으로 나감.</td><td class="note"><span class="none">메모 없음</span></td></tr>
+        <tr><td>UI 겹침이 조금 있음.</td><td class="note"><span class="none">메모 없음</span></td></tr>
+        <tr><td>타이틀 UI에서 "던전 청소부"만 동떨어진 느낌.</td><td class="note">"슬라임군"처럼 제목으로 구분하면 좋을 듯</td></tr>
+        <tr><td>던전 3층 "도둑쥐"가 후반부에 가면 화면이 복잡해서 보이지 않음.</td><td class="note"><span class="none">메모 없음</span></td></tr>
+        <tr><td>새 기능이 추가된 칸을 치우면 다시 볼 수가 없어서 무엇인지 알 수 없음. 2층 오염 뭐시기를 넘기니까 뭔지 모르겠음. 3층 도둑쥐도 훔쳐가는 걸 보고 알게 됨.</td><td class="note">기능 설명을 다시 볼 수 있는 곳이 있으면 좋을 듯</td></tr>
+      </tbody>
+      <tbody>
+        <tr class="mark"><th scope="rowgroup" rowspan="4">밸런스</th><td>극 초반 돈 밸런스가 안 맞음. 일반 등급은 7원 얻고 소환은 8원 버림.</td><td class="note"><span class="none">메모 없음</span></td></tr>
+        <tr><td>긴급 배송을 한 번 열면 이송하는 슬라임을 사용할 이유가 없어짐.</td><td class="note"><span class="none">메모 없음</span></td></tr>
+        <tr><td>후반으로 갈수록 고급 소환의 존재가 의미 없어짐.</td><td class="note"><span class="none">메모 없음</span></td></tr>
+        <tr class="mark-open"><td>기존에는 아이템 2000개로 코어 10000개도 못 채웠는데 지금은 25000개를 줌.</td><td class="note">밸런스가 수정된 건지는 모르겠음 <span class="tbd">[확인 필요]</span></td></tr>
+      </tbody>
+    </table>
+    <p class="muted">비고 칸에는 원래 기록에 있던 메모와 의견만 옮겼습니다. 초록색 줄은 숫자를 적은 항목, 보라색 줄은 확정하지 않고 표시해 둔 항목입니다. 각 항목이 이후에 수정됐는지는 모릅니다.</p>
+  </section>
+
+  <section id="unsure">
+    <h2>원인을 모를 때 적은 방식</h2>
+    <p>일부 항목은 원인을 알아내지 못했습니다. 그런 항목은 원인을 짐작해서 쓰지 않고 표시만 해 두었습니다.</p>
+    <p>후반부에 멈추는 문제는 "개인 컴퓨터 문제인지 확인 필요"라고 적었습니다. 코어를 25000개 주는 것도 밸런스를 고친 건지 몰라서 <span class="tbd">[확인 필요]</span>를 붙였습니다.</p>
+    <p>몇몇 항목 옆에는 <span class="memo">[기능 문제]</span>, <span class="memo">[사이즈 통일]</span>, <span class="memo">[보기 불편한 정도]</span>처럼 대괄호로 짧은 메모를 달았습니다.</p>
+  </section>
+
+  <section id="ideas">
+    <h2>개선 제안</h2>
+    <ul>
+      <li>런 강화를 더 많이 할 수 있으면 좋을 듯. 런 강화에서 한 번에 5~10렙씩 올리는 기능이 있으면 좋을 듯(5번만 해결하면 굳이 필요 없을 듯).</li>
+      <li>소환 확률같이 굳이 항상 띄울 필요 없는 건 접었다가 펴는 기능을 추가하면 좋을 듯.</li>
+      <li>성장의 나무를 다 채운 후 엔딩 연출이 있으면 좋을 듯. 지금은 성장의 나무 마지막을 채우면 바로 엔딩 화면이 떠버림.</li>
+    </ul>
+  </section>
+
+  <section id="limits">
+    <h2>한계와 배운 점</h2>
+    <ul class="limits">
+      <li>정식 테스트 절차를 따른 기록이 아닙니다.</li>
+      <li>재현 절차, 심각도, 결함 개수는 기록하지 않았습니다.</li>
+      <li>일부 항목은 원인을 확인하지 못했습니다.</li>
+      <li>적어 둔 문제가 이후에 수정됐는지는 알지 못합니다.</li>
+      <li>플레이한 빌드는 <span class="tbd">[확인 필요]</span>입니다.</li>
+      <li>기록은 4차례에 나눠서 썼습니다.</li>
+    </ul>
+    <p class="learn">배운 점: <span class="tbd">[확인 필요]</span></p>
+
+    <div class="shot">원본 Notion 스크린샷 자리 (첨부 여부 미정)</div>
+
+    <p class="muted credit">이 페이지를 정리하고 표로 나누는 데는 AI(Claude)의 도움을 받았습니다. 기록 내용은 제가 직접 플레이하면서 Notion에 쓴 것입니다.</p>
+  </section>
+
+</div>
+</body>
+</html>
