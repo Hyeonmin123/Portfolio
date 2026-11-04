@@ -3,8 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>김현민 | Portfolio</title>
-<meta name="description" content="게임을 기획하고 직접 만드는 김현민의 포트폴리오">
+<title>김현민 | QA Portfolio</title>
+<meta name="description" content="직접 플레이하고 결과를 검수하며 문제를 찾는 김현민의 QA 포트폴리오">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Black+Han+Sans&display=swap" rel="stylesheet">
@@ -18,12 +18,13 @@
   <aside class="sidebar">
     <div class="profile">
       <h1>김현민</h1>
-      <p class="role">기믹과 밸런스로 플레이 경험을<br>설계하는 게임 기획자</p>
+      <p class="role">버그를 찾고 같은 문제가<br>반복되지 않게 막는 QA</p>
       <p class="school">유한대학교<br>컴퓨터소프트웨어공학과<br>게임콘텐츠 전공</p>
     </div>
 
     <nav class="side-nav" aria-label="카테고리">
       <a href="#education" aria-current="true">학력</a>
+      <a href="#qa">QA 관점</a>
       <a href="#projects">프로젝트</a>
       <a href="#events">기획</a>
     </nav>
@@ -52,6 +53,39 @@
       </ul>
     </section>
 
+    <section id="qa" class="block">
+      <h2>QA 관점</h2>
+
+      <ul class="qa-grid">
+        <li class="qa-card">
+          <p class="qa-kind">echofall</p>
+          <h3>직접 플레이해야 찾을 수 있었던 문제</h3>
+          <p class="qa-text">솔버가 해가 있다고 확인한 5-3, 5-5가 직접 플레이해 보니 시작할 때 가만히 서 있어야만 풀렸습니다. 자동 검증은 사람이 풀 수 있음까지 보증하지 않는다는 것을 확인했습니다.</p>
+          <p class="qa-links"><a href="projects/echofall/index.html#playtest">발견 과정 보기</a></p>
+        </li>
+        <li class="qa-card">
+          <p class="qa-kind">echofall · 웹툰 정리 사이트</p>
+          <h3>자동 검증과 회귀 방지</h3>
+          <p class="qa-text">실제 키 입력을 프레임 단위로 재생하고, 프레임별 해시로 수정 전후 동작을 비교하고, 레벨 40개의 부팅·크래시를 검사합니다. 솔버는 표본 검증입니다. 웹툰 정리 사이트는 pytest 테스트 67개가 통과합니다.</p>
+          <p class="qa-links"><a href="projects/echofall/index.html#verify">echofall 검증 방법</a><a href="projects/webtoon-tracker/index.html#verify">웹툰 검증 방법</a></p>
+        </li>
+        <li class="qa-card">
+          <p class="qa-kind">오늘의 잡다한 정보</p>
+          <h3>장애와 중복 발행 대응</h3>
+          <p class="qa-text">API는 오류를 반환했지만 실제로는 발행돼 게시물이 두 번 올라갔습니다. 발행 전 중복 조회를 넣고, 크론 누락은 수동 실행으로 보충한 뒤 API로 실제 발행을 확인했습니다.</p>
+          <p class="qa-links"><a href="projects/todays-tmi/index.html#duplicate">사고 기록 보기</a></p>
+        </li>
+        <li class="qa-card">
+          <p class="qa-kind">웹툰 정리 사이트</p>
+          <h3>데이터 검수</h3>
+          <p class="qa-text">손으로 옮겨 적은 데이터를 해시로 검증해 틀린 줄을 찾았습니다. 결과 화면에서 회차 수(화)가 권으로 표시되는 오류를 직접 발견했습니다.</p>
+          <p class="qa-links"><a href="projects/webtoon-tracker/index.html#errors">오류 기록 보기</a></p>
+        </li>
+      </ul>
+
+      <p class="qa-note">위 프로젝트는 AI(Claude Code)와 협업해 만들었습니다. 코드와 검증 도구는 AI가 구현했고, 저는 직접 플레이하고 결과를 검수하며 문제를 찾고 피드백했습니다.</p>
+    </section>
+
     <section id="projects" class="block">
       <h2>프로젝트</h2>
 
@@ -70,15 +104,6 @@
       </a>
 
       <ul class="rows">
-        <li class="row">
-          <div class="row-title">
-            <h3>던전 청소부 슬라임군</h3>
-            <span class="live">개발중</span>
-          </div>
-          <p class="row-role">기획 · QA</p>
-          <p class="row-tools">Unity, Figma, Claude</p>
-          <p class="row-date">2026.09 –</p>
-        </li>
         <li class="row">
           <div class="row-title">
             <h3>echofall</h3>
@@ -108,6 +133,15 @@
           <p class="row-tools">Python, Flask, SQLite</p>
           <p class="row-date">2026.10 –</p>
           <a class="row-link" href="projects/webtoon-tracker/index.html">소개 보기</a>
+        </li>
+        <li class="row">
+          <div class="row-title">
+            <h3>던전 청소부 슬라임군</h3>
+            <span class="live">개발중</span>
+          </div>
+          <p class="row-role">기획 · QA</p>
+          <p class="row-tools">Unity, Figma, Claude</p>
+          <p class="row-date">2026.09 –</p>
         </li>
       </ul>
     </section>

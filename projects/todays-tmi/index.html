@@ -118,7 +118,7 @@ figcaption { margin-top: 0.5rem; }
 <aside class="subnav">
   <a class="subnav-name" href="../../index.html">김현민</a>
   <a class="subnav-back" href="../../index.html#projects">포트폴리오로 돌아가기</a>
-  <nav class="subnav-links" aria-label="카테고리"><a href="../../index.html#education">학력</a><a href="../../index.html#projects" aria-current="page">프로젝트</a><a href="../../index.html#events">기획</a></nav>
+  <nav class="subnav-links" aria-label="카테고리"><a href="../../index.html#education">학력</a><a href="../../index.html#qa">QA 관점</a><a href="../../index.html#projects" aria-current="page">프로젝트</a><a href="../../index.html#events">기획</a></nav>
   <div class="subnav-contact"><span>이메일</span><a href="mailto:hyeonmin6671@gmail.com">hyeonmin6671@gmail.com</a></div>
 </aside>
 
@@ -135,6 +135,17 @@ figcaption { margin-top: 0.5rem; }
 
   <p class="ai-note"><strong>AI를 활용해 제작했습니다.</strong> 구현은 Claude(Claude Code)와 협업했습니다. 저는 기획, 요구사항 정의, 콘텐츠 기준 수립, 결과물 검수와 피드백, 운영과 장애 대응을 맡았습니다.</p>
 
+  <div class="check" id="verify">
+    <h2>검증 방법</h2>
+    <dl class="fields">
+      <dt>중복 확인</dt><dd>발행 전에 API로 최근 게시물을 조회해 이미 올라갔는지 먼저 확인. 캡션 앞 60자로 판별</dd>
+      <dt>발행 확인</dt><dd>발행 여부는 <code>state/log.json</code> 한 곳에 기록. 중요한 경우와 보충 발행 뒤에는 인스타그램 API로 실제 상태를 다시 확인</dd>
+      <dt>음성 검수</dt><dd>TTS 음성을 STT로 다시 받아 적어 원문과 비교. 유사도 0.97 미만이면 다시 생성(최대 8회)</dd>
+      <dt>사실 검수</dt><dd>소재마다 출처와 검증 메모를 필수로 두고, 발행 전 웹 검색으로 다시 확인</dd>
+      <dt>렌더 확인</dt><dd>렌더한 결과의 프레임, 길이, 음량, 음성 인식 일치도를 확인한 뒤 보고</dd>
+    </dl>
+  </div>
+
   <div class="check">
     <h2>규모</h2>
     <dl class="fields">
@@ -144,6 +155,69 @@ figcaption { margin-top: 0.5rem; }
       <dt>발행 실행</dt><dd>GitHub Actions 1회 실행이 평균 20~30초</dd>
     </dl>
   </div>
+
+  <section id="incidents">
+    <h2>문제 해결</h2>
+    <p class="muted">운영하면서 생긴 문제와 대응입니다.</p>
+
+    <div class="bugs">
+      <article class="bug" id="duplicate">
+        <div class="bug-head"><h3>API는 실패라고 했는데 실제로는 발행됨</h3><span class="tag">중복 발행 사고 · 09-14</span></div>
+        <dl class="fields">
+          <dt>증상</dt><dd>같은 소재의 게시물이 두 번 올라갔습니다.</dd>
+          <dt>원인</dt><dd>Instagram <code>media_publish</code>가 오류를 반환했지만 실제로는 발행이 끝나 있었고, 재시도가 한 번 더 발행했습니다.</dd>
+          <dt class="fix">해결</dt><dd>발행 전에 API로 최근 게시물을 조회해 이미 올라갔는지 먼저 확인하는 멱등성 안전장치를 넣었습니다. 캡션 앞 60자로 중복을 판별합니다. 문제가 생기면 자동 발행을 즉시 끄고 진단하는 대응 절차도 정했습니다.</dd>
+          <dt class="guard">배운 점</dt><dd>외부 API의 실패 응답을 곧바로 실패로 믿지 않고 상태를 직접 조회해 확인합니다. 재시도에는 멱등성이 필요합니다.</dd>
+        </dl>
+      </article>
+
+      <article class="bug" id="cron">
+        <div class="bug-head"><h3>크론이 늦거나 아예 돌지 않음</h3></div>
+        <dl class="fields">
+          <dt>증상</dt><dd>GitHub 스케줄 크론은 1~7시간 늦게 도는 일이 흔합니다. 09-24에는 오후 2시 슬롯이 올라가지 않았습니다.</dd>
+          <dt>원인</dt><dd>Actions 실행 이력을 조회해 보니 12시, 13시, 14시 크론 3번이 한 번도 실행되지 않았습니다. 워크플로는 활성 상태였고 아침 슬롯은 정상이었습니다.</dd>
+          <dt class="fix">해결</dt><dd>슬롯마다 목표 2시간 전부터 1시간 간격으로 크론을 3번 걸고, 그 슬롯에 이미 발행했으면 나머지는 건너뜁니다. 처음에는 복잡한 다단계 재시도를 짰다가 이 단순한 방식으로 바꿨습니다. 누락 때는 수동 실행으로 바로 보충 발행하고 API로 실제 발행을 확인했으며, 외부 트리거도 열어 두었습니다.</dd>
+          <dt class="guard">배운 점</dt><dd>플랫폼 스케줄러도 정시 실행을 보장하지 않습니다. 모니터링과 보충 경로가 필요하고, 복잡한 재시도보다 단순한 구조가 낫습니다.</dd>
+        </dl>
+      </article>
+
+      <article class="bug">
+        <div class="bug-head"><h3>슬롯 창 겹침</h3><span class="tag">09-15</span></div>
+        <dl class="fields">
+          <dt>증상</dt><dd>점심 슬롯 발행이 통째로 사라졌습니다.</dd>
+          <dt>원인</dt><dd>슬롯은 6시, 9시, 18시였는데 슬롯 판정 허용 오차(4.5시간)가 슬롯 간격(3시간)보다 커서 아침 발행이 점심 슬롯으로 잘못 집계됐습니다.</dd>
+          <dt class="fix">해결</dt><dd>슬롯을 06시, 12시, 18시로 6시간 이상 띄우고 점심 목표를 14시로 옮겼습니다. 슬롯 창끼리 겹치면 안 된다는 규칙을 문서로 남겼습니다.</dd>
+        </dl>
+      </article>
+
+      <article class="bug">
+        <div class="bug-head"><h3>TTS 발음 검수 자동화</h3></div>
+        <dl class="fields">
+          <dt>증상</dt><dd>"그의 틀니는"이 "그에 틀리는"으로 뭉개진 음성이 발행됐습니다. 연도가 "천 구백 칠십 이 년"처럼 끊겨 읽히기도 했습니다.</dd>
+          <dt>원인</dt><dd>TTS로 만든 음성을 STT로 다시 받아 적어 원문과 유사도를 비교하고, 기준에 못 미치면 다시 만드는 루프가 있었지만 기준이 느슨했습니다. 연도 끊김은 띄어쓰기를 바꿔도 그대로였고, 실험해 보니 여러 자리 수를 어떤 단위로 쪼개 읽느냐가 원인이었습니다.</dd>
+          <dt class="fix">해결</dt><dd>유사도 기준을 0.93에서 0.97로 올리고 재시도를 5회에서 8회로 늘렸습니다. 비교 전에 숫자 읽기를 정규화하고, 8번 시도해도 못 읽는 낱말은 문장을 바꿔 피합니다. 숫자 표기 규칙을 정했고, STT 단어 타임스탬프로 숫자와 단위 사이의 무음 길이를 재는 진단 스크립트로 영상별로 점검합니다.</dd>
+        </dl>
+      </article>
+
+      <article class="bug">
+        <div class="bug-head"><h3>이미 아는 이야기와 사실 오류</h3></div>
+        <dl class="fields">
+          <dt>증상</dt><dd>검증과 사진 가능 여부로만 소재를 골랐더니 이미 널리 알려진 이야기가 섞여 반응이 나빴습니다. 기억에 의존해 쓴 사실이 틀린 사례도 있었습니다(세종 소재에서, 신하가 권한 것이 아니라 태종의 유언).</dd>
+          <dt class="fix">해결</dt><dd>인물의 유명도가 아니라 그 사실이 이미 널리 알려졌는지를 먼저 보는 선정 기준을 문서로 만들었습니다. 이 기준으로 40개 중 13개를 반려해 27개로 정리했고, 반려 목록은 따로 보관합니다.</dd>
+          <dt class="guard">재발 방지</dt><dd>모든 소재에 출처와 검증 메모를 필수로 두고, 발행 전 웹 검색 재확인을 규칙으로 정했습니다. 새 후보 28개도 다시 검증해 근거가 약하거나 결론이 불분명한 소재를 걸렀습니다.</dd>
+        </dl>
+      </article>
+
+      <article class="bug">
+        <div class="bug-head"><h3>발행한 소재가 큐에 남음</h3></div>
+        <dl class="fields">
+          <dt>증상</dt><dd>이미 발행된 소재가 재작업 대상에 들어갔습니다.</dd>
+          <dt>원인</dt><dd>콘텐츠 뱅크에 발행이 끝난 소재가 남아 있었고, 확인 없이 대량 수정 대상에 포함됐습니다.</dd>
+          <dt class="fix">해결</dt><dd>뱅크에는 미발행 소재만 두고 <code>state/log.json</code>과 대조하는 규칙을 정했습니다. 강제 발행이 필요하면 순서를 바꾼 뒤 원격 저장소에 먼저 push하고 실행합니다. Actions는 원격 저장소를 새로 받아 오기 때문입니다.</dd>
+        </dl>
+      </article>
+    </div>
+  </section>
 
   <section>
     <h2>문제 정의와 목표</h2>
@@ -223,69 +297,6 @@ figcaption { margin-top: 0.5rem; }
       <li><time datetime="2026-09-21">09-21~22</time>소재를 40개로 늘린 뒤 선정 기준을 세워 27개로 정리했습니다. 나레이션 템플릿을 확정하고 음성 검수 기준을 0.93에서 0.97로 올렸습니다.</li>
       <li><time datetime="2026-09-24">09-24 이후</time>하루 2회 안팎으로 소재 27개를 발행해 10-10에 모두 소진했습니다. 이 기간에 크론 누락 사고가 있었습니다. 지금은 새 소재 28개를 웹 검색으로 다시 검증하고 대본을 쓰고 있습니다.</li>
     </ol>
-  </section>
-
-  <section>
-    <h2>문제 해결</h2>
-    <p class="muted">운영하면서 생긴 문제와 대응입니다.</p>
-
-    <div class="bugs">
-      <article class="bug">
-        <div class="bug-head"><h3>API는 실패라고 했는데 실제로는 발행됨</h3><span class="tag">중복 발행 사고 · 09-14</span></div>
-        <dl class="fields">
-          <dt>증상</dt><dd>같은 소재의 게시물이 두 번 올라갔습니다.</dd>
-          <dt>원인</dt><dd>Instagram <code>media_publish</code>가 오류를 반환했지만 실제로는 발행이 끝나 있었고, 재시도가 한 번 더 발행했습니다.</dd>
-          <dt class="fix">해결</dt><dd>발행 전에 API로 최근 게시물을 조회해 이미 올라갔는지 먼저 확인하는 멱등성 안전장치를 넣었습니다. 캡션 앞 60자로 중복을 판별합니다. 문제가 생기면 자동 발행을 즉시 끄고 진단하는 대응 절차도 정했습니다.</dd>
-          <dt class="guard">배운 점</dt><dd>외부 API의 실패 응답을 곧바로 실패로 믿지 않고 상태를 직접 조회해 확인합니다. 재시도에는 멱등성이 필요합니다.</dd>
-        </dl>
-      </article>
-
-      <article class="bug">
-        <div class="bug-head"><h3>크론이 늦거나 아예 돌지 않음</h3></div>
-        <dl class="fields">
-          <dt>증상</dt><dd>GitHub 스케줄 크론은 1~7시간 늦게 도는 일이 흔합니다. 09-24에는 오후 2시 슬롯이 올라가지 않았습니다.</dd>
-          <dt>원인</dt><dd>Actions 실행 이력을 조회해 보니 12시, 13시, 14시 크론 3번이 한 번도 실행되지 않았습니다. 워크플로는 활성 상태였고 아침 슬롯은 정상이었습니다.</dd>
-          <dt class="fix">해결</dt><dd>슬롯마다 목표 2시간 전부터 1시간 간격으로 크론을 3번 걸고, 그 슬롯에 이미 발행했으면 나머지는 건너뜁니다. 처음에는 복잡한 다단계 재시도를 짰다가 이 단순한 방식으로 바꿨습니다. 누락 때는 수동 실행으로 바로 보충 발행하고 API로 실제 발행을 확인했으며, 외부 트리거도 열어 두었습니다.</dd>
-          <dt class="guard">배운 점</dt><dd>플랫폼 스케줄러도 정시 실행을 보장하지 않습니다. 모니터링과 보충 경로가 필요하고, 복잡한 재시도보다 단순한 구조가 낫습니다.</dd>
-        </dl>
-      </article>
-
-      <article class="bug">
-        <div class="bug-head"><h3>TTS 발음 검수 자동화</h3></div>
-        <dl class="fields">
-          <dt>증상</dt><dd>"그의 틀니는"이 "그에 틀리는"으로 뭉개진 음성이 발행됐습니다. 연도가 "천 구백 칠십 이 년"처럼 끊겨 읽히기도 했습니다.</dd>
-          <dt>원인</dt><dd>TTS로 만든 음성을 STT로 다시 받아 적어 원문과 유사도를 비교하고, 기준에 못 미치면 다시 만드는 루프가 있었지만 기준이 느슨했습니다. 연도 끊김은 띄어쓰기를 바꿔도 그대로였고, 실험해 보니 여러 자리 수를 어떤 단위로 쪼개 읽느냐가 원인이었습니다.</dd>
-          <dt class="fix">해결</dt><dd>유사도 기준을 0.93에서 0.97로 올리고 재시도를 5회에서 8회로 늘렸습니다. 비교 전에 숫자 읽기를 정규화하고, 8번 시도해도 못 읽는 낱말은 문장을 바꿔 피합니다. 숫자 표기 규칙을 정했고, STT 단어 타임스탬프로 숫자와 단위 사이의 무음 길이를 재는 진단 스크립트로 영상별로 점검합니다.</dd>
-        </dl>
-      </article>
-
-      <article class="bug">
-        <div class="bug-head"><h3>이미 아는 이야기와 사실 오류</h3></div>
-        <dl class="fields">
-          <dt>증상</dt><dd>검증과 사진 가능 여부로만 소재를 골랐더니 이미 널리 알려진 이야기가 섞여 반응이 나빴습니다. 기억에 의존해 쓴 사실이 틀린 사례도 있었습니다(세종 소재에서, 신하가 권한 것이 아니라 태종의 유언).</dd>
-          <dt class="fix">해결</dt><dd>인물의 유명도가 아니라 그 사실이 이미 널리 알려졌는지를 먼저 보는 선정 기준을 문서로 만들었습니다. 이 기준으로 40개 중 13개를 반려해 27개로 정리했고, 반려 목록은 따로 보관합니다.</dd>
-          <dt class="guard">재발 방지</dt><dd>모든 소재에 출처와 검증 메모를 필수로 두고, 발행 전 웹 검색 재확인을 규칙으로 정했습니다. 새 후보 28개도 다시 검증해 근거가 약하거나 결론이 불분명한 소재를 걸렀습니다.</dd>
-        </dl>
-      </article>
-
-      <article class="bug">
-        <div class="bug-head"><h3>슬롯 창 겹침</h3><span class="tag">09-15</span></div>
-        <dl class="fields">
-          <dt>증상</dt><dd>점심 슬롯 발행이 통째로 사라졌습니다.</dd>
-          <dt>원인</dt><dd>슬롯은 6시, 9시, 18시였는데 슬롯 판정 허용 오차(4.5시간)가 슬롯 간격(3시간)보다 커서 아침 발행이 점심 슬롯으로 잘못 집계됐습니다.</dd>
-          <dt class="fix">해결</dt><dd>슬롯을 06시, 12시, 18시로 6시간 이상 띄우고 점심 목표를 14시로 옮겼습니다. 슬롯 창끼리 겹치면 안 된다는 규칙을 문서로 남겼습니다.</dd>
-        </dl>
-      </article>
-
-      <article class="bug">
-        <div class="bug-head"><h3>발행한 소재가 큐에 남음</h3></div>
-        <dl class="fields">
-          <dt>증상</dt><dd>이미 발행된 소재가 재작업 대상에 들어갔습니다.</dd>
-          <dt>원인</dt><dd>콘텐츠 뱅크에 발행이 끝난 소재가 남아 있었고, 확인 없이 대량 수정 대상에 포함됐습니다.</dd>
-          <dt class="fix">해결</dt><dd>뱅크에는 미발행 소재만 두고 <code>state/log.json</code>과 대조하는 규칙을 정했습니다. 강제 발행이 필요하면 순서를 바꾼 뒤 원격 저장소에 먼저 push하고 실행합니다. Actions는 원격 저장소를 새로 받아 오기 때문입니다.</dd>
-        </dl>
-      </article>
-    </div>
   </section>
 
   <section>

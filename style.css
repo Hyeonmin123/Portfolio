@@ -352,3 +352,60 @@ footer {
   html { scroll-behavior: auto; }
   .live::before { animation: none; }
 }
+
+/* QA evidence cards */
+.qa-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(20rem, 100%), 1fr));
+  gap: 1rem;
+}
+
+.qa-card {
+  display: flex;
+  flex-direction: column;
+  padding: 1.25rem 1.35rem 1.3rem;
+  background: var(--card);
+  border: 2px solid var(--ink);
+  border-radius: 6px;
+}
+
+.qa-kind { font-size: 0.82rem; font-weight: 700; color: var(--violet); }
+
+.qa-card h3 {
+  margin-top: 0.3rem;
+  font-size: 1.12rem;
+  font-weight: 800;
+  line-height: 1.4;
+  word-break: keep-all;
+}
+
+.qa-text {
+  margin: 0.55rem 0 1.1rem;
+  font-size: 0.93rem;
+  color: var(--ink-soft);
+  word-break: keep-all;
+}
+
+.qa-links {
+  margin-top: auto;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem 1.1rem;
+}
+
+.qa-links a {
+  font-size: 0.88rem;
+  font-weight: 700;
+  color: var(--violet);
+  border-bottom: 2px solid currentColor;
+}
+
+.qa-links a:hover { color: var(--ink); }
+
+.qa-note {
+  padding-left: 0.9rem;
+  border-left: 3px solid var(--slime-deep);
+  font-size: 0.92rem;
+  color: var(--ink-soft);
+  word-break: keep-all;
+}

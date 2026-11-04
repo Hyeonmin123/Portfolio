@@ -73,9 +73,14 @@ body { padding-left: var(--subnav-w); }
 .subnav-contact a { font-weight: 600; word-break: break-all; }
 .subnav-contact a:hover { color: #6fe3a5; }
 
+/* Keep anchor targets clear of the top edge */
+.wrap [id] { scroll-margin-top: 1.5rem; }
+
 /* Mobile: a bar that stays at the top while scrolling */
 @media (max-width: 860px) {
   body { padding-left: 0; }
+
+  .wrap [id] { scroll-margin-top: 4.5rem; }
 
   .subnav {
     position: sticky;

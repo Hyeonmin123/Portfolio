@@ -105,7 +105,7 @@ kbd {
 .bug dt.fix { color: var(--violet); }
 .bug dt.guard { color: var(--slime-deep); }
 code { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; font-size: 0.88em; padding: 0 0.25rem; background: var(--card); border: 1px solid var(--line); border-radius: 3px; white-space: nowrap; }
-.bug code { background: var(--paper); }
+.bug code, .check code { background: var(--paper); }
 figure { margin: 1.25rem 0 0; }
 figure img { display: block; width: 100%; max-width: 100%; height: auto; border: 2px solid var(--ink); border-radius: 6px; background: var(--ink); }
 figcaption { margin-top: 0.5rem; }
@@ -131,7 +131,7 @@ figcaption { margin-top: 0.5rem; }
 <aside class="subnav">
   <a class="subnav-name" href="../../index.html">김현민</a>
   <a class="subnav-back" href="../../index.html#projects">포트폴리오로 돌아가기</a>
-  <nav class="subnav-links" aria-label="카테고리"><a href="../../index.html#education">학력</a><a href="../../index.html#projects" aria-current="page">프로젝트</a><a href="../../index.html#events">기획</a></nav>
+  <nav class="subnav-links" aria-label="카테고리"><a href="../../index.html#education">학력</a><a href="../../index.html#qa">QA 관점</a><a href="../../index.html#projects" aria-current="page">프로젝트</a><a href="../../index.html#events">기획</a></nav>
   <div class="subnav-contact"><span>이메일</span><a href="mailto:hyeonmin6671@gmail.com">hyeonmin6671@gmail.com</a></div>
 </aside>
 
@@ -148,6 +148,103 @@ figcaption { margin-top: 0.5rem; }
   </div>
 
   <p class="ai-note"><strong>AI를 활용해 제작했습니다.</strong> Claude Code와 협업해 만들었습니다. 코드 구현, 레벨 데이터, 검증 도구는 Claude Code가 맡았습니다. 저는 게임 콘셉트와 방향을 정하고, 직접 플레이해 보며 피드백하고, 난이도와 배포 범위를 결정했습니다.</p>
+
+  <div class="check" id="verify">
+    <h2>검증 방법</h2>
+    <dl class="fields">
+      <dt>자동 풀이</dt><dd>빔서치 솔버로 레벨에 해가 있는지 찾음. 표본 검증이며 증명은 아님</dd>
+      <dt>실제 키 입력</dt><dd>Playwright로 실제 키보드 이벤트를 한 프레임씩 넣어 클리어를 확인</dd>
+      <dt>회귀 비교</dt><dd>프레임별 해시를 저장해 두고 수정 전후 레벨과 숨은 방의 동작이 같은지 비교</dd>
+      <dt>부팅·크래시</dt><dd>캠페인 30개, 도전 10개 레벨을 열어 멈추거나 오류가 나지 않는지 검사</dd>
+      <dt>UI 점검</dt><dd>허브, 탭, 업적 화면을 점검하는 스크립트</dd>
+      <dt>저장 호환</dt><dd>레벨 개정 번호 <code>rev</code>의 세이브 마이그레이션 테스트</dd>
+      <dt>직접 플레이</dt><dd>제가 직접 플레이해 사람이 풀 수 없는 레벨을 발견. 모든 레벨을 사람이 검증한 것은 아님</dd>
+    </dl>
+    <p class="muted">검증 도구는 Claude Code가 구현했습니다.</p>
+  </div>
+
+  <section id="problems">
+    <h2>발견한 문제와 대응</h2>
+    <p class="muted">개발하면서 생긴 문제와 대응입니다. 누가 찾았는지 분명한 항목에만 발견자를 적었습니다.</p>
+
+    <div class="bugs">
+      <article class="bug" id="playtest">
+        <div class="bug-head"><h3>자동 검증이 보증하지 못한 것</h3><span class="tag">제가 직접 플레이해 발견</span></div>
+        <dl class="fields">
+          <dt>문제</dt><dd>도구로 해가 있다고 확인한 레벨 중에, 타이밍 허용 구간이 7~9프레임뿐이라 사람이 손으로 풀기 어려운 레벨이 있었습니다.</dd>
+          <dt>사례</dt><dd>5-3, 5-5는 가만히 서서 시작해야 감시자가 깨어나지 않는 풀이였습니다. 보통처럼 바로 움직이면 풀 수 없었습니다. 6-5도 직접 플레이한 뒤 너무 어렵다고 피드백했습니다.</dd>
+          <dt>배운 점</dt><dd>자동 검증은 해가 있음을 보증할 뿐 사람이 풀 수 있음을 보증하지 않습니다.</dd>
+          <dt class="fix">새 기준</dt><dd>타이밍 허용 구간 약 20프레임 이상, 움직이는 첫 프레임부터 시작해도 풀릴 것, 입력을 앞뒤로 몇 프레임 흔들어도 클리어되는지 보는 견고성 테스트.</dd>
+          <dt>현재</dt><dd>4막, 5-3, 5-5, 6-5의 재설계는 진행하지 않았고, 해당 레벨은 그대로 두었습니다.</dd>
+        </dl>
+      </article>
+
+      <article class="bug">
+        <div class="bug-head"><h3>기믹을 위한 장애물이 되지 않게</h3><span class="tag">제 피드백</span></div>
+        <dl class="fields">
+          <dt>문제</dt><dd>4막을 허공 메아리 기믹으로 채웠더니, 맵이 기믹만을 위한 장애물처럼 보였습니다.</dd>
+          <dt class="fix">원칙</dt><dd>기믹을 지워도 방으로서 말이 되는 구조를 먼저 짜고, 기믹은 그 안에서 풀이 재료 중 하나로 넣는다는 설계 원칙을 세웠습니다.</dd>
+          <dt>현재</dt><dd>이 원칙에 따른 4막 재설계는 진행하지 않았습니다.</dd>
+        </dl>
+      </article>
+
+      <article class="bug">
+        <div class="bug-head"><h3>풀 수 없는 레벨을 막는 자동 검증 도구</h3></div>
+        <dl class="fields">
+          <dt>문제</dt><dd>퍼즐은 의도한 풀이가 실제로 성립하는지, 더 쉬운 우회로가 없는지 확인하기 어렵습니다.</dd>
+          <dt class="fix">해결</dt><dd>실제 키 입력을 프레임 단위로 재생하는 도구(<code>kb.mjs</code>)와 빔서치 솔버(<code>probe.cjs</code>)를 만들었습니다. 메아리 수를 줄여도 깨지는지 보는 검사와 랜덤 재시작 샘플링도 더했습니다.</dd>
+          <dt>확인</dt><dd>예전 레벨(2-1~2-4)에서 솔버가 의도한 해를 실제로 찾는 것을 확인했습니다.</dd>
+          <dt class="guard">한계</dt><dd>표본 검증입니다. "목표보다 적은 메아리로는 못 깬다"는 결론도 샘플링 증거일 뿐입니다.</dd>
+        </dl>
+      </article>
+
+      <article class="bug">
+        <div class="bug-head"><h3>실제 키 입력으로만 검증</h3></div>
+        <dl class="fields">
+          <dt>문제</dt><dd>처음에는 디버그 함수와 스크립트 입력으로 클리어를 확인했는데, 이 경로는 실제 키 입력과 다를 수 있었습니다.</dd>
+          <dt>원인</dt><dd>모든 루프는 키 입력으로 시작해야 하고, 가만히 있는 루프도 <kbd>↓</kbd> 키로 시작해야 실제 플레이와 같아진다는 규칙을 발견했습니다.</dd>
+          <dt class="fix">해결</dt><dd>검증을 Playwright 실제 키보드 이벤트로 통일했습니다. 스크립트로 자동 클리어한 경우에는 업적을 주지 않게 막았습니다.</dd>
+        </dl>
+      </article>
+
+      <article class="bug">
+        <div class="bug-head"><h3>기존 동작을 깨지 않기</h3></div>
+        <dl class="fields">
+          <dt>문제</dt><dd>레벨을 수정하면 다른 레벨이나 숨은 방의 동작이 바뀔 수 있습니다.</dd>
+          <dt class="fix">해결</dt><dd>프레임별 해시 베이스라인을 저장해 두고, 수정 뒤에도 기존 레벨과 숨은 방의 동작이 바이트 단위로 같은지 비교했습니다.</dd>
+          <dt class="guard">검증</dt><dd>숨은 방은 입구 발견부터 비밀 업적까지 실제 키 입력으로 통과하는 종단 간 스크립트로 확인했습니다.</dd>
+        </dl>
+      </article>
+
+      <article class="bug">
+        <div class="bug-head"><h3>레벨을 고쳐도 기록을 잃지 않게</h3></div>
+        <dl class="fields">
+          <dt>문제</dt><dd>레벨을 개편하면 기존 플레이어의 저장 기록이 바뀐 레벨과 맞지 않게 됩니다.</dd>
+          <dt class="fix">해결</dt><dd>레벨 데이터에 개정 번호 <code>rev</code>를 두었습니다. 개정된 레벨은 별과 클리어 기록은 유지하고, 리플레이·최고 기록·황금 기록·무사고 기록만 무효화합니다.</dd>
+          <dt class="guard">검증</dt><dd>마이그레이션 테스트 스크립트(<code>rev_test.mjs</code>)로 확인했습니다.</dd>
+        </dl>
+      </article>
+
+      <article class="bug">
+        <div class="bug-head"><h3>화면 요소가 겹치거나 넘침</h3></div>
+        <dl class="fields">
+          <dt>문제</dt><dd>업적이 27개를 넘으면서 업적 카드의 텍스트가 겹쳤습니다. 진행 막대의 "n / 목표" 라벨이 좁은 카드에서 넘쳤고, 타이틀 화면의 캐릭터가 메뉴 패널 뒤에 가려졌습니다.</dd>
+          <dt class="fix">해결</dt><dd>업적 화면을 탭과 페이지네이션 구조로 바꿨습니다. 라벨 폭을 먼저 잰 뒤 남은 폭을 막대에 주게 했고, 캐릭터가 모이는 지점을 옮겼습니다.</dd>
+        </dl>
+      </article>
+
+      <article class="bug">
+        <div class="bug-head"><h3>AI의 판단이 틀렸던 사례</h3></div>
+        <dl class="fields">
+          <dt>가정</dt><dd>Claude Code는 점프의 정점이나 하강 중에 커밋하는 방법으로는 원하는 높이에 도달할 수 없다고 판단했습니다.</dd>
+          <dt>확인</dt><dd>실험해 보니 틀렸습니다. 정점 근처에서 커밋한 메아리에 올라타거나 메아리를 쌓아 더 높이 갈 수 있었습니다.</dd>
+          <dt class="fix">대응</dt><dd>실험 결과에 맞춰 계획을 수정했습니다.</dd>
+        </dl>
+      </article>
+    </div>
+  </section>
+
+
 
   <section>
     <h2>게임 설명</h2>
@@ -174,89 +271,6 @@ figcaption { margin-top: 0.5rem; }
         <img src="../../assets/echofall/watcher-5-2.png" width="800" height="684" loading="lazy" alt="레벨 5-2 사이에 선 과거 화면. 위쪽에 붉은 눈의 그림자 형태인 감시자가 있고, 아래에 플레이어, 레이저, 압력판, 가시가 보입니다. 오른쪽 위에 모래시계 아이콘과 막대가 있습니다.">
         <figcaption class="muted">레벨 5-2. 위쪽의 붉은 눈이 감시자입니다.</figcaption>
       </figure>
-    </div>
-  </section>
-
-  <div class="check">
-    <h2>검증 방법</h2>
-    <dl class="fields">
-      <dt>자동 풀이</dt><dd>빔서치 솔버로 레벨에 해가 있는지 찾음. 표본 검증이며 증명은 아님</dd>
-      <dt>실제 키 입력</dt><dd>Playwright로 실제 키보드 이벤트를 한 프레임씩 넣어 클리어를 확인</dd>
-      <dt>회귀 비교</dt><dd>프레임별 해시를 저장해 두고 수정 전후 동작이 같은지 비교</dd>
-      <dt>직접 플레이</dt><dd>제가 직접 플레이해 사람이 풀 수 없는 레벨을 발견. 모든 레벨을 사람이 검증한 것은 아님</dd>
-    </dl>
-  </div>
-
-  <section>
-    <h2>해결한 문제들</h2>
-    <p class="muted">개발하면서 생긴 문제와 대응입니다. 누가 찾았는지 분명한 항목에만 발견자를 적었습니다.</p>
-
-    <div class="bugs">
-      <article class="bug">
-        <div class="bug-head"><h3>풀 수 없는 레벨을 막는 자동 검증 도구</h3></div>
-        <dl class="fields">
-          <dt>문제</dt><dd>퍼즐은 의도한 풀이가 실제로 성립하는지, 더 쉬운 우회로가 없는지 확인하기 어렵습니다.</dd>
-          <dt class="fix">해결</dt><dd>실제 키 입력을 프레임 단위로 재생하는 도구(<code>kb.mjs</code>)와 빔서치 솔버(<code>probe.cjs</code>)를 만들었습니다. 메아리 수를 줄여도 깨지는지 보는 검사와 랜덤 재시작 샘플링도 더했습니다.</dd>
-          <dt>확인</dt><dd>예전 레벨(2-1~2-4)에서 솔버가 의도한 해를 실제로 찾는 것을 확인했습니다.</dd>
-          <dt class="guard">한계</dt><dd>표본 검증입니다. "목표보다 적은 메아리로는 못 깬다"는 결론도 샘플링 증거일 뿐입니다.</dd>
-        </dl>
-      </article>
-
-      <article class="bug">
-        <div class="bug-head"><h3>자동 검증이 보증하지 못한 것</h3><span class="tag">제가 직접 플레이해 발견</span></div>
-        <dl class="fields">
-          <dt>문제</dt><dd>도구로 해가 있다고 확인한 레벨 중에, 타이밍 허용 구간이 7~9프레임뿐이라 사람이 손으로 풀기 어려운 레벨이 있었습니다.</dd>
-          <dt>사례</dt><dd>5-3, 5-5는 가만히 서서 시작해야 감시자가 깨어나지 않는 풀이였습니다. 보통처럼 바로 움직이면 풀 수 없었습니다.</dd>
-          <dt>배운 점</dt><dd>자동 검증은 해가 있음을 보증할 뿐 사람이 풀 수 있음을 보증하지 않습니다.</dd>
-          <dt class="fix">새 기준</dt><dd>타이밍 허용 구간 약 20프레임 이상, 움직이는 첫 프레임부터 시작해도 풀릴 것, 입력을 앞뒤로 몇 프레임 흔들어도 클리어되는지 보는 견고성 테스트.</dd>
-          <dt>현재</dt><dd>4막, 5-3, 5-5, 6-5의 재설계는 진행하지 않았고, 해당 레벨은 그대로 두었습니다.</dd>
-        </dl>
-      </article>
-
-      <article class="bug">
-        <div class="bug-head"><h3>실제 키 입력으로만 검증</h3></div>
-        <dl class="fields">
-          <dt>문제</dt><dd>처음에는 디버그 함수와 스크립트 입력으로 클리어를 확인했는데, 이 경로는 실제 키 입력과 다를 수 있었습니다.</dd>
-          <dt>원인</dt><dd>모든 루프는 키 입력으로 시작해야 하고, 가만히 있는 루프도 <kbd>↓</kbd> 키로 시작해야 실제 플레이와 같아진다는 규칙을 발견했습니다.</dd>
-          <dt class="fix">해결</dt><dd>검증을 Playwright 실제 키보드 이벤트로 통일했습니다. 스크립트로 자동 클리어한 경우에는 업적을 주지 않게 막았습니다.</dd>
-        </dl>
-      </article>
-
-      <article class="bug">
-        <div class="bug-head"><h3>레벨을 고쳐도 기록을 잃지 않게</h3></div>
-        <dl class="fields">
-          <dt>문제</dt><dd>레벨을 개편하면 기존 플레이어의 저장 기록이 바뀐 레벨과 맞지 않게 됩니다.</dd>
-          <dt class="fix">해결</dt><dd>레벨 데이터에 개정 번호 <code>rev</code>를 두었습니다. 개정된 레벨은 별과 클리어 기록은 유지하고, 리플레이·최고 기록·황금 기록·무사고 기록만 무효화합니다.</dd>
-          <dt class="guard">검증</dt><dd>마이그레이션 테스트 스크립트(<code>rev_test.mjs</code>)로 확인했습니다.</dd>
-        </dl>
-      </article>
-
-      <article class="bug">
-        <div class="bug-head"><h3>기존 동작을 깨지 않기</h3></div>
-        <dl class="fields">
-          <dt>문제</dt><dd>레벨을 수정하면 다른 레벨이나 숨은 방의 동작이 바뀔 수 있습니다.</dd>
-          <dt class="fix">해결</dt><dd>프레임별 해시 베이스라인을 저장해 두고, 수정 뒤에도 기존 레벨과 숨은 방의 동작이 바이트 단위로 같은지 비교했습니다.</dd>
-          <dt class="guard">검증</dt><dd>숨은 방은 입구 발견부터 비밀 업적까지 실제 키 입력으로 통과하는 종단 간 스크립트로 확인했습니다.</dd>
-        </dl>
-      </article>
-
-      <article class="bug">
-        <div class="bug-head"><h3>기믹을 위한 장애물이 되지 않게</h3><span class="tag">제 피드백</span></div>
-        <dl class="fields">
-          <dt>문제</dt><dd>4막을 허공 메아리 기믹으로 채웠더니, 맵이 기믹만을 위한 장애물처럼 보였습니다.</dd>
-          <dt class="fix">원칙</dt><dd>기믹을 지워도 방으로서 말이 되는 구조를 먼저 짜고, 기믹은 그 안에서 풀이 재료 중 하나로 넣는다는 설계 원칙을 세웠습니다.</dd>
-          <dt>현재</dt><dd>이 원칙에 따른 4막 재설계는 진행하지 않았습니다.</dd>
-        </dl>
-      </article>
-
-      <article class="bug">
-        <div class="bug-head"><h3>AI의 판단이 틀렸던 사례</h3></div>
-        <dl class="fields">
-          <dt>가정</dt><dd>Claude Code는 점프의 정점이나 하강 중에 커밋하는 방법으로는 원하는 높이에 도달할 수 없다고 판단했습니다.</dd>
-          <dt>확인</dt><dd>실험해 보니 틀렸습니다. 정점 근처에서 커밋한 메아리에 올라타거나 메아리를 쌓아 더 높이 갈 수 있었습니다.</dd>
-          <dt class="fix">대응</dt><dd>실험 결과에 맞춰 계획을 수정했습니다.</dd>
-        </dl>
-      </article>
     </div>
   </section>
 

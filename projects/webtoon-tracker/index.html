@@ -91,7 +91,7 @@ figcaption { margin-top: 0.75rem; }
 <aside class="subnav">
   <a class="subnav-name" href="../../index.html">김현민</a>
   <a class="subnav-back" href="../../index.html#projects">포트폴리오로 돌아가기</a>
-  <nav class="subnav-links" aria-label="카테고리"><a href="../../index.html#education">학력</a><a href="../../index.html#projects" aria-current="page">프로젝트</a><a href="../../index.html#events">기획</a></nav>
+  <nav class="subnav-links" aria-label="카테고리"><a href="../../index.html#education">학력</a><a href="../../index.html#qa">QA 관점</a><a href="../../index.html#projects" aria-current="page">프로젝트</a><a href="../../index.html#events">기획</a></nav>
   <div class="subnav-contact"><span>이메일</span><a href="mailto:hyeonmin6671@gmail.com">hyeonmin6671@gmail.com</a></div>
 </aside>
 
@@ -103,7 +103,7 @@ figcaption { margin-top: 0.75rem; }
 
   <p class="ai-note"><strong>AI를 활용해 제작했습니다.</strong> Claude Code와 대화하며 만들었습니다. 저는 무엇을 만들지 정하고, 결과를 확인해 틀린 부분을 바로잡았습니다.</p>
 
-  <div class="check">
+  <div class="check" id="verify">
     <h2>검증 방법</h2>
     <dl class="fields">
       <dt>자동 테스트</dt><dd>pytest 테스트 67개 통과</dd>
@@ -113,7 +113,7 @@ figcaption { margin-top: 0.75rem; }
     </dl>
   </div>
 
-  <section>
+  <section id="errors">
     <h2>오류와 수정</h2>
     <p class="muted">만들면서 생긴 오류와 수정 내용입니다. 누가 찾았는지 분명한 항목에만 발견자를 적었습니다.</p>
 
@@ -128,12 +128,10 @@ figcaption { margin-top: 0.75rem; }
       </article>
 
       <article class="bug">
-        <div class="bug-head"><h3>DB 손상</h3></div>
+        <div class="bug-head"><h3>옮겨 적은 데이터의 틀린 줄</h3></div>
         <dl class="fields">
-          <dt>증상</dt><dd>중복 행과 인덱스 오류 발생</dd>
-          <dt>원인</dt><dd>갑작스러운 종료로 DB 손상</dd>
-          <dt class="fix">수정</dt><dd>DB 복구</dd>
-          <dt class="guard">재발 방지</dt><dd>쓰기 내용이 디스크에 반영됐는지 확인하는 절차 추가</dd>
+          <dt>증상</dt><dd>손으로 옮겨 적은 데이터에 틀린 줄이 있음</dd>
+          <dt>찾은 방법</dt><dd>해시 검증으로 틀린 줄을 찾아냄</dd>
         </dl>
       </article>
 
@@ -147,26 +145,12 @@ figcaption { margin-top: 0.75rem; }
       </article>
 
       <article class="bug">
-        <div class="bug-head"><h3>같은 작품의 제목 표기 차이</h3></div>
+        <div class="bug-head"><h3>DB 손상</h3></div>
         <dl class="fields">
-          <dt>증상</dt><dd>같은 작품인데 플랫폼마다 제목 표기가 다름</dd>
-          <dt class="fix">수정</dt><dd>이름 정규화와 별칭 처리로 하나의 작품으로 통합</dd>
-        </dl>
-      </article>
-
-      <article class="bug">
-        <div class="bug-head"><h3>옮겨 적은 데이터의 틀린 줄</h3></div>
-        <dl class="fields">
-          <dt>증상</dt><dd>손으로 옮겨 적은 데이터에 틀린 줄이 있음</dd>
-          <dt>찾은 방법</dt><dd>해시 검증으로 틀린 줄을 찾아냄</dd>
-        </dl>
-      </article>
-
-      <article class="bug">
-        <div class="bug-head"><h3>정보가 부족한 작품</h3></div>
-        <dl class="fields">
-          <dt>증상</dt><dd>일부 작품의 정보가 너무 적음</dd>
-          <dt class="fix">수정</dt><dd>여러 출처의 정보를 모아 보강</dd>
+          <dt>증상</dt><dd>중복 행과 인덱스 오류 발생</dd>
+          <dt>원인</dt><dd>갑작스러운 종료로 DB 손상</dd>
+          <dt class="fix">수정</dt><dd>DB 복구</dd>
+          <dt class="guard">재발 방지</dt><dd>쓰기 내용이 디스크에 반영됐는지 확인하는 절차 추가</dd>
         </dl>
       </article>
 
@@ -175,6 +159,22 @@ figcaption { margin-top: 0.75rem; }
         <dl class="fields">
           <dt>증상</dt><dd>수집하는 동안 점검이나 차단 화면이 뜸</dd>
           <dt class="fix">대응</dt><dd>요청 속도 제한. 이런 화면이 뜨면 우회하지 않고 멈춘 뒤 나중에 이어서 수집</dd>
+        </dl>
+      </article>
+
+      <article class="bug">
+        <div class="bug-head"><h3>같은 작품의 제목 표기 차이</h3></div>
+        <dl class="fields">
+          <dt>증상</dt><dd>같은 작품인데 플랫폼마다 제목 표기가 다름</dd>
+          <dt class="fix">수정</dt><dd>이름 정규화와 별칭 처리로 하나의 작품으로 통합</dd>
+        </dl>
+      </article>
+
+      <article class="bug">
+        <div class="bug-head"><h3>정보가 부족한 작품</h3></div>
+        <dl class="fields">
+          <dt>증상</dt><dd>일부 작품의 정보가 너무 적음</dd>
+          <dt class="fix">수정</dt><dd>여러 출처의 정보를 모아 보강</dd>
         </dl>
       </article>
     </div>
