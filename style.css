@@ -237,6 +237,8 @@ main > * {
   color: var(--slime-deep);
 }
 
+.live.paused { color: var(--ink-soft); }
+
 .live::before {
   content: "";
   width: 8px;
@@ -245,6 +247,8 @@ main > * {
   background: var(--slime-deep);
   animation: pulse 1.8s ease-in-out infinite;
 }
+
+.live.paused::before { background: var(--ink-soft); animation: none; }
 
 @keyframes pulse { 50% { opacity: 0.25; } }
 

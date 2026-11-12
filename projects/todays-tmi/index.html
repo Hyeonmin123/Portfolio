@@ -37,6 +37,8 @@ h1 { font-size: clamp(2.2rem, 7vw, 3.4rem); }
 .status { display: flex; flex-wrap: wrap; align-items: center; gap: 0.4rem 1rem; margin: 0.9rem 0 0; font-size: 0.95rem; color: var(--ink-soft); }
 .live { display: inline-flex; align-items: center; gap: 0.4rem; font-size: 0.85rem; font-weight: 700; color: var(--slime-deep); }
 .live::before { content: ""; width: 8px; height: 8px; border-radius: 50%; background: var(--slime-deep); animation: pulse 1.8s ease-in-out infinite; }
+.live.paused { color: var(--ink-soft); }
+.live.paused::before { background: var(--ink-soft); animation: none; }
 @keyframes pulse { 50% { opacity: 0.25; } }
 @media (prefers-reduced-motion: reduce) { .live::before { animation: none; } .go { transition: none; } }
 .lead { margin: 1rem 0 0; font-size: 1.15rem; color: var(--ink-soft); }
@@ -125,12 +127,12 @@ figcaption { margin-top: 0.5rem; }
 <div class="wrap">
 
   <h1>오늘의 잡다한 정보</h1>
-  <p class="status"><span>2026.09 – 현재</span><span class="live">운영중</span><span>인스타그램 자동 발행 시스템</span></p>
+  <p class="status"><span>2026.09 –</span><span class="live paused">운영 중단</span><span>인스타그램 자동 발행 시스템</span></p>
   <p class="lead"><strong>인스타그램 계정 @today.tminformation에 릴스와 사진 게시물을 정해진 시간에 자동으로 올리는 시스템입니다.</strong> 콘텐츠는 미리 만들어 검수하고, 발행과 기록은 GitHub Actions가 맡습니다. 서버와 DB 없이 GitHub만으로 운영합니다.</p>
 
   <div class="actions">
     <a class="go" href="https://www.instagram.com/today.tminformation/" target="_blank" rel="noopener">인스타그램 계정 보기<span class="new-tab"> (새 탭)</span></a>
-    <p class="muted">2026-10-20 기준 새 소재를 준비하고 있습니다.</p>
+    <p class="muted">현재는 운영을 중단한 상태입니다. 게시물은 2026-10-10까지 올렸습니다.</p>
   </div>
 
   <p class="ai-note"><strong>AI를 활용해 제작했습니다.</strong> 구현은 Claude(Claude Code)와 협업했습니다. 저는 기획, 요구사항 정의, 콘텐츠 기준 수립, 결과물 검수와 피드백, 운영과 장애 대응을 맡았습니다.</p>
@@ -295,7 +297,7 @@ figcaption { margin-top: 0.5rem; }
       <li><time datetime="2026-09-15">09-15</time>슬롯 창 겹침 버그를 찾아 고쳤습니다.</li>
       <li><time datetime="2026-09-21">09-21</time>주제를 인물·위인의 의외의 사실로 바꿨습니다. 릴스를 Pixabay 사진과 ElevenLabs 나레이션으로 만들고, 같은 소재로 사진 3장 캐러셀도 함께 발행하기 시작했습니다.</li>
       <li><time datetime="2026-09-21">09-21~22</time>소재를 40개로 늘린 뒤 선정 기준을 세워 27개로 정리했습니다. 나레이션 템플릿을 확정하고 음성 검수 기준을 0.93에서 0.97로 올렸습니다.</li>
-      <li><time datetime="2026-09-24">09-24 이후</time>하루 2회 안팎으로 소재 27개를 발행해 10-10에 모두 소진했습니다. 이 기간에 크론 누락 사고가 있었습니다. 지금은 새 소재 28개를 웹 검색으로 다시 검증하고 대본을 쓰고 있습니다.</li>
+      <li><time datetime="2026-09-24">09-24 이후</time>하루 2회 안팎으로 소재 27개를 발행해 10-10에 모두 소진했습니다. 이 기간에 크론 누락 사고가 있었습니다. 이후 새 소재 28개를 웹 검색으로 다시 검증하며 대본을 준비하다가, 현재는 운영을 중단했습니다.</li>
     </ol>
   </section>
 
