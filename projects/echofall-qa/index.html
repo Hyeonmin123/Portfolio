@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Echofall QA 기록 | 김현민 QA Portfolio</title>
+<meta name="description" content="Echofall을 개발하며 찾은 결함 22건과 이를 바탕으로 쓴 테스트 케이스 21건을 Jira로 정리한 기록">
+<link href="https://fonts.googleapis.com/css2?family=Black+Han+Sans&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
+<style>
+:root {
+  --paper: #e8eaf3;
+  --card: #f6f7fb;
+  --ink: #1c1b33;
+  --ink-soft: #5b5a76;
+  --line: #c9cce0;
+  --slime: #6fe3a5;
+  --slime-deep: #0d7a47;
+  --violet: #4a3cf0;
+}
+* { box-sizing: border-box; }
+body {
+  margin: 0;
+  background: var(--paper);
+  color: var(--ink);
+  font-family: "Pretendard Variable", Pretendard, "Apple SD Gothic Neo", "Noto Sans KR", sans-serif;
+  line-height: 1.75;
+  -webkit-font-smoothing: antialiased;
+  word-break: keep-all;
+  overflow-wrap: break-word;
+}
+a { color: inherit; }
+:focus-visible { outline: 3px solid var(--violet); outline-offset: 3px; border-radius: 4px; }
+.wrap { max-width: 46rem; margin: 0 auto; padding: 2rem 1.5rem 4rem; }
+.back { display: inline-block; margin-bottom: 2.5rem; font-weight: 700; text-decoration: none; border-bottom: 2px solid var(--ink); }
+.back:hover { color: var(--violet); border-color: var(--violet); }
+h1, h2 { font-family: "Black Han Sans", "Pretendard Variable", sans-serif; font-weight: 400; line-height: 1.25; margin: 0; }
+h1 { font-size: clamp(2.2rem, 7vw, 3.4rem); }
+.status { display: flex; flex-wrap: wrap; align-items: center; gap: 0.4rem 1rem; margin: 0.9rem 0 0; font-size: 0.95rem; color: var(--ink-soft); }
+.live { display: inline-flex; align-items: center; gap: 0.4rem; font-size: 0.85rem; font-weight: 700; color: var(--slime-deep); }
+.live::before { content: ""; width: 8px; height: 8px; border-radius: 50%; background: var(--slime-deep); animation: pulse 1.8s ease-in-out infinite; }
+@keyframes pulse { 50% { opacity: 0.25; } }
+@media (prefers-reduced-motion: reduce) { .live::before { animation: none; } }
+.lead { margin: 1rem 0 0; font-size: 1.15rem; color: var(--ink-soft); }
+.ai-note {
+  margin: 1.75rem 0 0;
+  padding: 1rem 1.25rem;
+  background: var(--ink);
+  color: var(--paper);
+  border-radius: 6px;
+  font-size: 0.98rem;
+}
+.ai-note strong { color: var(--slime); }
+section { margin-top: 3rem; padding-top: 2rem; border-top: 2px solid var(--ink); }
+h2 { font-size: 1.6rem; margin-bottom: 1rem; }
+h3 { margin: 1.5rem 0 0.25rem; font-size: 1.05rem; font-weight: 800; }
+p { margin: 0.5rem 0; }
+ul { margin: 0.5rem 0; padding-left: 1.2rem; }
+li { margin: 0.35rem 0; }
+.muted { color: var(--ink-soft); font-size: 0.92rem; }
+.memo { font-weight: 700; color: var(--violet); white-space: nowrap; }
+.tbd { font-weight: 700; color: var(--violet); white-space: nowrap; }
+
+.split { display: grid; grid-template-columns: 1fr 1fr; gap: 1.25rem; margin-top: 1.25rem; }
+.hl { padding: 1rem 1.25rem 1.1rem; background: var(--card); border: 2px solid var(--ink); border-left-width: 8px; border-radius: 6px; }
+.hl.num { border-left-color: var(--slime-deep); }
+.hl.open { border-left-color: var(--violet); }
+.hl h3 { margin: 0 0 0.4rem; }
+.hl ul { padding-left: 1.1rem; font-size: 0.95rem; }
+
+.log { width: 100%; margin-top: 1.5rem; border-collapse: collapse; background: var(--card); border: 2px solid var(--ink); font-size: 0.95rem; }
+.log th, .log td { padding: 0.6rem 0.8rem; border-bottom: 1px solid var(--line); text-align: left; vertical-align: top; }
+.log thead th { background: var(--ink); color: var(--paper); font-size: 0.85rem; font-weight: 800; }
+.log tbody th { width: 8.5rem; font-weight: 800; border-right: 1px solid var(--line); }
+.log tbody tr:last-child td { border-bottom: 2px solid var(--ink); }
+.log tbody:last-child tr:last-child td { border-bottom: 0; }
+.log tbody th[rowspan] { border-bottom: 2px solid var(--ink); }
+.log tbody:last-child th[rowspan] { border-bottom: 0; }
+.log td.note { width: 34%; color: var(--ink-soft); }
+.log tr.mark td { background: #e3f8ec; }
+.log tr.mark-open td { background: #ebe9fd; }
+.log .none { color: #8c8ba6; }
+
+.limits { padding-left: 1.2rem; }
+
+.credit { margin-top: 1.5rem; }
+
+@media (max-width: 600px) {
+  .split { grid-template-columns: 1fr; }
+  .log, .log tbody, .log tr, .log th, .log td { display: block; width: auto; }
+  .log { border: 0; background: transparent; }
+  .log thead { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); }
+  .log tbody { margin-top: 1rem; background: var(--card); border: 2px solid var(--ink); border-radius: 6px; overflow: hidden; }
+  .log tbody th, .log tbody th[rowspan] { width: auto; background: var(--ink); color: var(--paper); border: 0; }
+  .log tr { border-bottom: 1px solid var(--line); }
+  .log tbody tr:last-child { border-bottom: 0; }
+  .log td, .log tbody tr:last-child td { border: 0; }
+  .log td { padding: 0.5rem 0.8rem 0; }
+  .log td.note { width: auto; padding: 0.1rem 0.8rem 0.6rem; font-size: 0.88rem; }
+  .log td.note::before { content: "조치 "; font-weight: 800; color: var(--ink-soft); }
+  .memo, .tbd { white-space: normal; }
+}
+
+.numbers { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0.75rem; margin: 1.5rem 0 0; padding: 0; list-style: none; }
+.numbers li { margin: 0; padding: 0.8rem 0.9rem; background: var(--card); border: 2px solid var(--ink); border-radius: 6px; }
+.numbers b { display: block; font-family: "Black Han Sans", "Pretendard Variable", sans-serif; font-weight: 400; font-size: 1.6rem; line-height: 1.2; }
+.numbers span { font-size: 0.88rem; color: var(--ink-soft); }
+.key { display: block; font-size: 0.82rem; font-weight: 800; color: var(--violet); }
+.log tbody th .when, .log tbody th .pri { display: block; font-size: 0.82rem; font-weight: 600; color: var(--ink-soft); }
+.log td .tc { display: block; margin-top: 0.3rem; font-size: 0.85rem; color: var(--ink-soft); }
+.mine { display: inline-block; margin-left: 0.35rem; padding: 0 0.5rem; border-radius: 999px; background: var(--slime); font-size: 0.75rem; font-weight: 700; white-space: nowrap; }
+.case { margin-top: 1.25rem; padding: 1rem 1.25rem 1.1rem; background: var(--card); border: 2px solid var(--ink); border-radius: 6px; }
+.case h3 { margin: 0 0 0.6rem; }
+.fields { margin: 0; display: grid; grid-template-columns: 5.5rem 1fr; gap: 0.35rem 0.9rem; }
+.fields dt { font-size: 0.85rem; font-weight: 800; color: var(--ink-soft); padding-top: 0.15rem; }
+.fields dd { margin: 0; }
+.fields ol, .fields ul { margin: 0; padding-left: 1.2rem; }
+.tcs { margin: 1.25rem 0 0; padding: 0; list-style: none; background: var(--card); border: 2px solid var(--ink); border-radius: 6px; }
+.tcs li { display: grid; grid-template-columns: 4.2rem 1fr auto; gap: 0.25rem 0.8rem; align-items: baseline; margin: 0; padding: 0.55rem 0.9rem; border-bottom: 1px solid var(--line); font-size: 0.95rem; }
+.tcs li:last-child { border-bottom: 0; }
+.tcs .key { display: inline; }
+.tcs .from { font-size: 0.82rem; color: var(--ink-soft); white-space: nowrap; }
+@media (max-width: 600px) {
+  .numbers { grid-template-columns: 1fr; }
+  .fields { grid-template-columns: 1fr; gap: 0; }
+  .fields dd { margin-bottom: 0.5rem; }
+  .tcs li { grid-template-columns: 1fr; gap: 0; }
+  .log tbody th .when, .log tbody th .pri { display: inline; margin-left: 0.5rem; color: var(--line); }
+  .log tbody th .key { display: inline; color: var(--slime); }
+}
+</style>
+<link rel="stylesheet" href="../../subnav.css">
+</head>
+<body>
+<aside class="subnav">
+  <a class="subnav-name" href="../../index.html">김현민</a>
+  <a class="subnav-back" href="../../index.html#projects">포트폴리오로 돌아가기</a>
+  <nav class="subnav-links" aria-label="카테고리"><a href="../../index.html#qa" aria-current="page">QA 관점</a><a href="../../index.html#projects">프로젝트</a><a href="../../index.html#education">학력</a></nav>
+  <div class="subnav-contact"><span>이메일</span><a href="mailto:hyeonmin6671@gmail.com">hyeonmin6671@gmail.com</a></div>
+</aside>
+
+<div class="wrap">
+
+  <h1>Echofall QA 기록</h1>
+  <p class="status"><span>Echofall · 메아리의 탑</span><span>2026.09 – 2026.11</span><span>Jira로 관리</span></p>
+  <p class="lead">Echofall을 개발하면서 나온 결함과 피드백을 Jira에 버그 22건으로 정리하고, 같은 문제가 다시 생기지 않는지 확인하는 테스트 케이스 21건을 썼습니다.</p>
+
+  <ul class="numbers">
+    <li><b>22</b><span>버그 (모두 수정 완료)</span></li>
+    <li><b>21</b><span>테스트 케이스 (미실행)</span></li>
+    <li><b>3</b><span>열려 있는 항목</span></li>
+  </ul>
+
+  <p class="ai-note"><strong>테스트 케이스는 아직 실행하지 않았습니다.</strong> 결함은 제가 직접 플레이하며 찾았거나 개발 중 커밋 기록에 남은 것입니다. 기록을 Jira 이슈로 옮기고 테스트 케이스 초안을 쓰는 데는 AI(Claude)의 도움을 받았습니다.</p>
+
+  <section id="how">
+    <h2>정리한 방식</h2>
+    <ul>
+      <li>Jira 에픽 하나(Echofall QA) 아래에 업무 유형을 버그, 테스트 케이스, 작업으로 나눠 등록했습니다.</li>
+      <li>버그에는 증상, 조치, 발견일, 근거(직접 플레이인지 커밋 기록인지), 확인할 테스트 케이스 번호를 적었습니다.</li>
+      <li>테스트 케이스에는 목적, 근거가 된 버그 번호, 사전 조건, 절차, 기대 결과를 적었습니다.</li>
+      <li>레벨 번호는 "17(4-2)"처럼 순번과 막-레벨을 함께 적었습니다.</li>
+    </ul>
+    <p class="muted">출처는 2026-10-06부터 2026-11-12까지의 작업 대화 기록과, 2026-09-24부터 2026-11-09까지의 git 커밋 123개입니다. 10월 6일 이전 항목은 커밋 메시지가 근거라서 누가 찾았는지는 알 수 없습니다.</p>
+  </section>
+
+  <section id="bugs">
+    <h2>버그 22건</h2>
+    <p class="muted">영역별로 묶었습니다. "직접 발견"은 제가 플레이하거나 결과를 검토하다 찾은 것으로 기록에 남아 있는 항목입니다. 22건 모두 기록상 수정이 끝났습니다.</p>
+    <table class="log">
+      <thead>
+        <tr><th scope="col">번호</th><th scope="col">증상</th><th scope="col">조치</th></tr>
+      </thead>
+      <tbody>
+        <tr><th scope="row"><span class="key">KAN-5</span><span class="when">레벨 · 09-25</span><span class="pri">우선순위 가장 높음</span></th><td>17(4-2)·19(4-4)·22(5-2)·24(5-4)·29(6-4)레벨에 출구가 없어 클리어할 수 없음</td><td class="note">해당 레벨에 출구 추가<span class="tc">확인 TC: KAN-30</span></td></tr>
+        <tr><th scope="row"><span class="key">KAN-6</span><span class="when">레벨 · 09-25</span><span class="pri">우선순위 높음</span></th><td>23(5-3)레벨 배치 오류 4건. 발판 감지 위치가 바닥과 안 겹침, 블록이 구덩이 반대편, 엘리베이터 꼭대기에 착지 바닥 없음, 스위치가 벽 속</td><td class="note">네 항목 모두 수정<span class="tc">확인 TC: KAN-35</span></td></tr>
+        <tr><th scope="row"><span class="key">KAN-7</span><span class="when">레벨 · 09-25</span><span class="pri">우선순위 높음</span></th><td>25(5-5)레벨 &quot;블록이 레이저를 막는다&quot;는 전제가 실제 타이밍에서 성립하지 않음</td><td class="note">레이저 안전 구간 조정<span class="tc">확인 TC: KAN-34</span></td></tr>
+        <tr><th scope="row"><span class="key">KAN-8</span><span class="when">레벨 · 09-25</span><span class="pri">우선순위 보통</span></th><td>21(5-1)레벨 구덩이 점프 착지점이 다음 레이저 위치와 겹침</td><td class="note">착지점과 레이저 사이 간격 조정<span class="tc">확인 TC: KAN-34</span></td></tr>
+        <tr><th scope="row"><span class="key">KAN-9</span><span class="when">레벨 · 09-25</span><span class="pri">우선순위 높음</span></th><td>무게 2 발판으로 여는 문이 플레이어가 발판 범위에 있을 때만 열려 있어 통과할 수 없음 (16~29레벨)</td><td class="note">발판과 문 사이 거리 일괄 조정<span class="tc">확인 TC: KAN-32</span></td></tr>
+        <tr><th scope="row"><span class="key">KAN-10</span><span class="when">레벨 · 09-25</span><span class="pri">우선순위 보통</span></th><td>27(6-2)·29(6-4)레벨 천칭 다리 밑이 힌트(&quot;바닥 없는 협곡&quot;)와 달리 막혀 있음</td><td class="note">구덩이를 진짜 바닥 없음으로 변경<span class="tc">확인 TC: KAN-33</span></td></tr>
+        <tr><th scope="row"><span class="key">KAN-11</span><span class="when">레벨 · 09-25</span><span class="pri">우선순위 높음</span></th><td>17(4-2)·25(5-5)레벨과 19(4-4)레벨 두 번째 관문을 에코 없이 혼자 통과할 수 있음</td><td class="note">문과 발판 간격 조정. 25레벨은 블록이 떨어지는 구덩이 추가<span class="tc">확인 TC: KAN-31</span></td></tr>
+        <tr><th scope="row"><span class="key">KAN-12</span><span class="when">레벨 · 09-25</span><span class="pri">우선순위 보통</span></th><td>감시자 도전 레벨 7~9가 같은 맵이고 위험 요소가 가시 하나뿐</td><td class="note">레벨마다 다른 지형, 위험 요소 3개씩<span class="tc">확인 TC: KAN-50</span></td></tr>
+        <tr><th scope="row"><span class="key">KAN-23</span><span class="when">레벨 · 10-28</span><span class="pri">우선순위 높음</span></th><td>9막: 기믹 설명이 없고, 기믹 없이도 클리어되고, 역행 장치에서 에코가 끊겨 보임<span class="mine">직접 발견</span></td><td class="note">9막 전 레벨을 기믹 없이는 못 깨도록 재제작. 설명은 장치 근처에서 창으로<span class="tc">확인 TC: KAN-44</span></td></tr>
+      </tbody>
+      <tbody>
+        <tr><th scope="row"><span class="key">KAN-13</span><span class="when">규칙·충돌 · 09-27</span><span class="pri">우선순위 가장 높음</span></th><td>움직이는 발판과 벽 사이에 끼면 캐릭터가 벽을 뚫고 튕겨 나감</td><td class="note">벽에 박히는 이동은 막도록 충돌 처리 수정<span class="tc">확인 TC: KAN-36</span></td></tr>
+        <tr><th scope="row"><span class="key">KAN-14</span><span class="when">규칙·충돌 · 09-27</span><span class="pri">우선순위 높음</span></th><td>감시자가 벽 속에서 생성될 수 있음</td><td class="note">생성 위치 검사 추가<span class="tc">확인 TC: KAN-37</span></td></tr>
+        <tr><th scope="row"><span class="key">KAN-18</span><span class="when">규칙·충돌 · 09-28</span><span class="pri">우선순위 높음</span></th><td>감시자의 유예 시간이 가만히 서 있는 동안에도 줄어듦 (&quot;움직이자마자 잡힘&quot;)</td><td class="note">처음 움직일 때부터 유예 시간이 시작되도록 수정<span class="tc">확인 TC: KAN-37</span></td></tr>
+        <tr><th scope="row"><span class="key">KAN-24</span><span class="when">규칙·충돌 · 10-28</span><span class="pri">우선순위 보통</span></th><td>8-3 &quot;에코 3개&quot; 풀이가 실제로는 덮어쓰기를 포함해 에코 4개를 사용함<span class="mine">직접 발견</span></td><td class="note">덮어쓰기 횟수를 레벨 목표에 표시 (8-3: 1, 8-4: 2, 8-5: 1)<span class="tc">확인 TC: KAN-43</span></td></tr>
+      </tbody>
+      <tbody>
+        <tr><th scope="row"><span class="key">KAN-26</span><span class="when">튜토리얼 · 10-27</span><span class="pri">우선순위 높음</span></th><td>1막에 F(에코 만들기) 설명이 없고, 맵 안내 글이 실제 조작과 다름<span class="mine">직접 발견</span></td><td class="note">F 설명 추가, 키 설명 순서 정리. 이후 강제 진행형 튜토리얼로 재구성<span class="tc">확인 TC: KAN-39</span></td></tr>
+        <tr><th scope="row"><span class="key">KAN-20</span><span class="when">튜토리얼 · 10-28</span><span class="pri">우선순위 보통</span></th><td>전체 초기화를 해도 튜토리얼이 다시 나오지 않음<span class="mine">직접 발견</span></td><td class="note">초기화할 때 튜토리얼 기록도 함께 지움<span class="tc">확인 TC: KAN-40</span></td></tr>
+      </tbody>
+      <tbody>
+        <tr><th scope="row"><span class="key">KAN-19</span><span class="when">UI · 09-28</span><span class="pri">우선순위 보통</span></th><td>업적 화면에서 글자가 겹치고 진행 숫자가 카드 밖으로 나감</td><td class="note">탭과 페이지네이션 구조로 변경, 라벨 폭을 먼저 재도록 수정<span class="tc">확인 TC: KAN-45</span></td></tr>
+        <tr><th scope="row"><span class="key">KAN-21</span><span class="when">UI · 10-28</span><span class="pri">우선순위 보통</span></th><td>관리자 화면이 스크롤되지 않아 아래 항목을 쓸 수 없음<span class="mine">직접 발견</span></td><td class="note">휠, PageUp/PageDown, 선택 따라 스크롤 추가<span class="tc">확인 TC: KAN-47</span></td></tr>
+        <tr><th scope="row"><span class="key">KAN-22</span><span class="when">UI · 10-28</span><span class="pri">우선순위 낮음</span></th><td>레벨 선택 화면의 리플레이 표시가 칸을 넘어감<span class="mine">직접 발견</span></td><td class="note">글자 길이에 맞춰 크기 조정<span class="tc">확인 TC: KAN-46</span></td></tr>
+        <tr><th scope="row"><span class="key">KAN-25</span><span class="when">UI · 10-28</span><span class="pri">우선순위 보통</span></th><td>감시자 막에서 시작 전부터 화면이 빨갛게 가득 차 눈이 아픔<span class="mine">직접 발견</span></td><td class="note">쫓길 때만, 서서히, 가장자리에만 약하게<span class="tc">확인 TC: KAN-38</span></td></tr>
+      </tbody>
+      <tbody>
+        <tr><th scope="row"><span class="key">KAN-15</span><span class="when">사운드·문구·배포 · 09-27</span><span class="pri">우선순위 보통</span></th><td>3~6막 20개 레벨이 같은 배경음을 공유하고, 4~6막에서 클리어·되감기 소리가 나지 않을 수 있음</td><td class="note">막별 곡 추가, 막 데이터 표 확장<span class="tc">확인 TC: KAN-48</span></td></tr>
+        <tr><th scope="row"><span class="key">KAN-16</span><span class="when">사운드·문구·배포 · 09-27</span><span class="pri">우선순위 낮음</span></th><td>개편 뒤에도 예전 문구가 남아 있음 (6막 업적 이름, 크레딧의 &quot;3막 15레벨&quot;)</td><td class="note">문구 수정<span class="tc">확인 TC: KAN-49</span></td></tr>
+        <tr><th scope="row"><span class="key">KAN-17</span><span class="when">사운드·문구·배포 · 09-28</span><span class="pri">우선순위 높음</span></th><td>브라우저가 예전 game.js를 캐시해 업데이트가 보이지 않음</td><td class="note">캐시 헤더 추가<span class="tc">확인 TC: KAN-49</span></td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <section id="tc">
+    <h2>테스트 케이스 21건</h2>
+    <p>버그마다 "고친 뒤에 무엇을 해 보면 다시 생겼는지 알 수 있는가"를 기준으로 썼습니다. 아래는 그중 하나입니다.</p>
+
+    <div class="case">
+      <h3>KAN-37 감시자 유예 시간은 처음 움직일 때부터 흐르고, 감시자는 벽 밖에서 생성된다</h3>
+      <dl class="fields">
+        <dt>목적</dt><dd>감시자의 시작 조건과 생성 위치가 규칙대로인지 확인</dd>
+        <dt>근거</dt><dd>KAN-18(가만히 서 있어도 유예 시간이 줄었음), KAN-14(감시자가 벽 속에서 생성됨)</dd>
+        <dt>대상</dt><dd>5막 이후 감시자가 나오는 레벨, 도전 레벨 7~9</dd>
+        <dt>절차</dt><dd><ol>
+          <li>감시자가 나오는 레벨에 들어간다.</li>
+          <li>아무 키도 누르지 않고 10초 이상 가만히 서 있는다. 감시자가 움직이는지 본다.</li>
+          <li>그 뒤 처음 움직이고, 감시자가 쫓아오기 시작할 때까지의 시간을 잰다.</li>
+          <li>레벨을 다시 시작해, 이번에는 들어가자마자 움직이고 같은 시간을 잰다.</li>
+          <li>감시자가 처음 나타나는 위치가 벽 타일과 겹치는지 확인한다.</li>
+        </ol></dd>
+        <dt>기대 결과</dt><dd><ul>
+          <li>가만히 서 있는 동안에는 감시자가 쫓아오지 않고 유예 시간도 줄지 않는다.</li>
+          <li>3번과 4번에서 잰 유예 시간이 같다.</li>
+          <li>감시자는 항상 벽 밖의 빈 공간에서 생성된다.</li>
+        </ul></dd>
+        <dt>참고</dt><dd>시연 영상이나 디버그 실행이 아니라 실제 키 입력으로 확인한다. 10월 6일에 시연과 실제 동작이 달랐던 적이 있다.</dd>
+      </dl>
+    </div>
+
+    <ul class="tcs">
+      <li><span class="key">KAN-30</span><span>캠페인 전 레벨에 출구가 있고 끝까지 클리어할 수 있다</span><span class="from">근거 KAN-5 · 가장 높음</span></li>
+      <li><span class="key">KAN-31</span><span>에코 관문은 에코 없이 혼자서는 통과할 수 없다</span><span class="from">근거 KAN-11 · 높음</span></li>
+      <li><span class="key">KAN-32</span><span>무게 2 발판으로 연 문을 플레이어가 실제로 통과할 수 있다</span><span class="from">근거 KAN-9 · 높음</span></li>
+      <li><span class="key">KAN-33</span><span>구덩이는 안내 문구대로 바닥이 없고, 떨어지면 죽는다</span><span class="from">근거 KAN-10 · 보통</span></li>
+      <li><span class="key">KAN-34</span><span>21·25레벨 레이저 구간을 의도된 풀이로 통과할 수 있다</span><span class="from">근거 KAN-7, 8 · 높음</span></li>
+      <li><span class="key">KAN-35</span><span>23레벨의 발판·블록·엘리베이터·스위치가 쓸 수 있는 위치에 있다</span><span class="from">근거 KAN-6 · 보통</span></li>
+      <li><span class="key">KAN-36</span><span>움직이는 발판과 벽 사이에 끼어도 캐릭터가 벽을 뚫지 않는다</span><span class="from">근거 KAN-13 · 가장 높음</span></li>
+      <li><span class="key">KAN-37</span><span>감시자 유예 시간은 처음 움직일 때부터 흐르고, 감시자는 벽 밖에서 생성된다</span><span class="from">근거 KAN-14, 18 · 높음</span></li>
+      <li><span class="key">KAN-38</span><span>감시자 막의 붉은 화면 효과는 쫓길 때만, 가장자리에 약하게 나온다</span><span class="from">근거 KAN-25 · 보통</span></li>
+      <li><span class="key">KAN-39</span><span>처음 시작하면 강제 진행형 튜토리얼이 이동·점프·F·E·밀기를 순서대로 가르친다</span><span class="from">근거 KAN-26 · 높음</span></li>
+      <li><span class="key">KAN-40</span><span>캠페인 초기화·전체 초기화 뒤에는 튜토리얼이 다시 나온다</span><span class="from">근거 KAN-20 · 보통</span></li>
+      <li><span class="key">KAN-41</span><span>R을 1초 이상 누르면 레벨 전체가 초기화되고, 누르는 동안 남은 시간이 표시된다</span><span class="from">근거 10-27 요청 · 보통</span></li>
+      <li><span class="key">KAN-42</span><span>루프 타이머가 8초를 넘어도 루프가 끝나지 않고, 8초 주기 장치는 막는 상태로 고정된다</span><span class="from">근거 10-28 규칙 변경 · 높음</span></li>
+      <li><span class="key">KAN-43</span><span>8-3·8-4·8-5의 목표에 덮어쓰기 횟수가 표시되고 실제 필요한 횟수와 일치한다</span><span class="from">근거 KAN-24 · 보통</span></li>
+      <li><span class="key">KAN-44</span><span>9막은 시간 장치를 쓰지 않으면 깰 수 없고, 장치 설명 창은 한 번만 뜬다</span><span class="from">근거 KAN-23 · 높음</span></li>
+      <li><span class="key">KAN-45</span><span>업적 화면에서 글자가 겹치지 않고 진행 숫자가 카드 안에 들어온다</span><span class="from">근거 KAN-19 · 보통</span></li>
+      <li><span class="key">KAN-46</span><span>레벨 선택 화면에서 별·금문·리플레이 표시가 기록과 일치하고 칸을 넘지 않는다</span><span class="from">근거 KAN-22 · 보통</span></li>
+      <li><span class="key">KAN-47</span><span>관리자 화면을 휠·PageUp/PageDown·선택 이동으로 끝까지 스크롤할 수 있다</span><span class="from">근거 KAN-21 · 낮음</span></li>
+      <li><span class="key">KAN-48</span><span>막마다 배경음이 다르고, 모든 막에서 클리어·되감기 소리가 난다</span><span class="from">근거 KAN-15 · 보통</span></li>
+      <li><span class="key">KAN-49</span><span>배포 후 일반 새로고침만으로 새 버전이 보이고, 예전 문구가 남아 있지 않다</span><span class="from">근거 KAN-16, 17 · 높음</span></li>
+      <li><span class="key">KAN-50</span><span>감시자 도전 레벨 7~9는 서로 다른 지형이고 위험 요소가 3개씩 있다</span><span class="from">근거 KAN-12 · 낮음</span></li>
+    </ul>
+    <p class="muted">오른쪽은 근거가 된 버그 번호와 우선순위입니다. 버그가 아니라 규칙 변경을 확인하는 케이스는 날짜를 적었습니다.</p>
+  </section>
+
+  <section id="open">
+    <h2>열려 있는 항목</h2>
+    <ul>
+      <li><strong>2~6막 재설계본 보류 (KAN-27).</strong> 직접 플레이해 보니 5-3, 5-5는 감시자가 너무 빨라 깰 수 없었고, 6-5는 6-4에 비해 지나치게 어려웠고, 4막은 맵이 기믹만을 위한 장애물처럼 보였습니다. 재설계본 전체를 보류하고 라이브에는 예전 2~6막을 유지하고 있습니다.</li>
+      <li><strong>새 효과음 27개 청취 확인 (KAN-28).</strong> 교체는 했지만 사람이 들어 보고 확인하지 않아 아직 배포하지 않았습니다.</li>
+      <li><strong>배경음 (KAN-29).</strong> 1막 시안은 청취 피드백 대기, 나머지 막과 타이틀·엔딩은 미착수입니다.</li>
+    </ul>
+  </section>
+
+  <section id="limits">
+    <h2>한계</h2>
+    <ul class="limits">
+      <li>테스트 케이스 21건은 작성만 했고 실행 결과는 아직 없습니다.</li>
+      <li>버그의 "수정 완료"는 기록 기준입니다. 현재 빌드에서 다시 확인한 것은 아닙니다.</li>
+      <li>9월 항목은 커밋 메시지에서 옮긴 것이라 재현 절차와 발견자가 남아 있지 않습니다.</li>
+      <li>우선순위는 정리하면서 붙인 것으로, 발견 당시에 매긴 값이 아닙니다.</li>
+      <li>Jira는 개인 사이트라 공개 링크가 없습니다.</li>
+    </ul>
+    <p class="muted credit">게임 소개와 검증 도구는 <a href="../echofall/index.html">Echofall 소개 페이지</a>에 있습니다.</p>
+  </section>
+
+</div>
+</body>
+</html>
