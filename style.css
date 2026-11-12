@@ -188,7 +188,7 @@ main > * {
   line-height: 1.15;
 }
 
-.shipped-desc { margin-top: 0.8rem; max-width: 30rem; color: #c4c6e0; }
+.shipped-desc { margin-top: 0.8rem; max-width: 30rem; color: #c4c6e0; word-break: keep-all; }
 
 .meta { align-self: end; min-width: 12rem; }
 
@@ -201,8 +201,8 @@ main > * {
   font-size: 0.9rem;
 }
 
-.meta dt { color: #a3a6c8; }
-.meta dd { font-weight: 600; text-align: right; }
+.meta dt { color: #a3a6c8; flex-shrink: 0; white-space: nowrap; }
+.meta dd { font-weight: 600; text-align: right; word-break: keep-all; }
 
 .shipped-go {
   grid-column: 1 / -1;
